@@ -66,15 +66,15 @@
   background: #000000 !important;
 }
 
-/* Leaflet Map Cursor Rules — Native grab on hover, grabbing during drag (No SVG / No JS) */
+/* Leaflet Map Cursor Rules — Black Open Hand on Hover, Black Closed Hand during Drag */
 .leaflet-container,
+.leaflet-container *,
 .leaflet-grab,
 .leaflet-pane,
 .leaflet-tile-pane,
 .leaflet-tile-container,
 .leaflet-tile {
-  cursor: -webkit-grab !important;
-  cursor: grab !important;
+  cursor: url('/cursors/grab.svg') 12 12, url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%0A%20%20%3Cpath%20fill%3D%22%23000000%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%221.2%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%20d%3D%22M12%202a1.5%201.5%200%200%200-1.5%201.5v6a0.5%200.5%200%200%201-1%200V3.5a1.5%201.5%200%200%200-3%200v5.5a0.5%200.5%200%200%201-1%200V5a1.5%201.5%200%200%200-3%200v7a0.5%200.5%200%200%201-1%200V8.5a1.5%201.5%200%200%200-3%200v6c0%205%203.5%208%208%208h1c4.5%200%208-3%208-8V5a1.5%201.5%200%200%200-3%200v4.5a0.5%200.5%200%200%201-1%200V3.5A1.5%201.5%200%200%200%2012%202z%22%2F%3E%0A%3C%2Fsvg%3E") 12 12, grab !important;
 }
 
 .leaflet-container.leaflet-dragging,
@@ -84,8 +84,7 @@
 .leaflet-dragging .leaflet-tile-pane,
 .leaflet-container:active,
 .leaflet-container:active * {
-  cursor: -webkit-grabbing !important;
-  cursor: grabbing !important;
+  cursor: url('/cursors/grabbing.svg') 12 12, url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%0A%20%20%3Cpath%20fill%3D%22%23000000%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%221.2%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22%20d%3D%22M9.5%207.5a1.5%201.5%200%200%201%203%200V9a1.5%201.5%200%200%201%203%200v1a1.5%201.5%200%200%201%203%200v3.5c0%204.5-3%207-7%207h-1c-4%200-7-2.5-7-7V11a1.5%201.5%200%200%201%203%200v-1a1.5%201.5%200%200%201%203%200v-1a1.5%201.5%200%200%201%203-1.5z%22%2F%3E%0A%3C%2Fsvg%3E") 12 12, grabbing !important;
 }
 
 /* Markers, controls, and interactive overlays retain standard pointer */
