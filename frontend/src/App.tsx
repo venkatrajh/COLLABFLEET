@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useApp } from './context/AppContext';
 import { Navbar } from './components/common/Navbar';
 import { MobileNav } from './components/common/MobileNav';
@@ -19,19 +19,51 @@ import { MyTrucksView } from './components/fleet/MyTrucksView';
 import { SmartInsightsView } from './components/insights/SmartInsightsView';
 import { ProfileView } from './components/auth/ProfileView';
 import { AuthModal } from './components/auth/AuthModal';
-import { LandingOverlay } from './components/landing/LandingOverlay';
-import { ArrowLeft, ChevronDown, ChevronUp } from 'lucide-react';
+import { LandingPage } from './components/landing/LandingPage';
+import { LoginPage } from './components/auth/LoginPage';
+import { ArrowLeft, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
 
 export const App: React.FC = () => {
   const { 
+    isAuthenticated,
     activeView, 
     setActiveView, 
+    currentRole,
     matchingResults, 
     searchQuery,
     selectedMatch,
+    isSearchPanelCollapsed,
     setIsSearchPanelCollapsed,
-    isSearchPanelCollapsed
+    isMapExpanded,
+    toggleMapExpanded
   } = useApp();
+
+  // Guard protected routes if unauthenticated
+  useEffect(() => {
+    if (!isAuthenticated && activeView !== 'landing' && activeView !== 'login') {
+      setActiveView('landing');
+    }
+  }, [isAuthenticated, activeView, setActiveView]);
+
+  // 1. Unauthenticated: Full Landing Page Experience
+  if (!isAuthenticated && activeView === 'landing') {
+    return (
+      <div className="relative w-screen min-h-screen bg-neutral-50 dark:bg-black font-sans">
+        <LandingPage />
+        <Toast />
+      </div>
+    );
+  }
+
+  // 2. Authentication: Role-Selection + Login Page
+  if (!isAuthenticated && activeView === 'login') {
+    return (
+      <div className="relative w-screen min-h-screen bg-neutral-50 dark:bg-black font-sans">
+        <LoginPage />
+        <Toast />
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-screen min-h-screen bg-neutral-100 dark:bg-black text-neutral-900 dark:text-neutral-100 overflow-x-hidden font-sans select-none">
@@ -45,20 +77,19 @@ export const App: React.FC = () => {
       {/* 3. Main Dynamic Content Overlay (pointer-events-none so map receives mouse & touch) */}
       <main className="relative z-10 pt-20 sm:pt-24 px-3 sm:px-6 pb-20 md:pb-8 max-w-7xl mx-auto min-h-screen flex flex-col justify-start pointer-events-none">
         
-        {/* VIEW: HOME */}
-        {activeView === 'home' && (
-          <div className="space-y-8">
-            
-            {/* Top Row: Floating Search Card on Left, Real-Time Card on Right */}
+        {/* VIEW: HOME (Shipper Map-First View) */}
+        {activeView === 'home' && !isMapExpanded && (
+          <div className="space-y-4">
+            {/* Top Row: Floating Search Card on Left, Real-Time Corridor Card on Right */}
             <div className="flex flex-col sm:flex-row items-start justify-between gap-4 pt-1">
               <SearchPanel />
 
-              {/* Minimal Corridor Indicator Card */}
+              {/* Minimal Live Corridor Indicator Card */}
               <div className="hidden lg:block max-w-xs pointer-events-auto">
                 <div className="glass-panel p-3.5 rounded-2xl border shadow-lg space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-500">
-                      Live Corridors
+                      Live Freight Corridor
                     </span>
                     <span className="w-2 h-2 rounded-full bg-black dark:bg-white animate-pulse" />
                   </div>
@@ -66,19 +97,16 @@ export const App: React.FC = () => {
                     Chennai → Bengaluru Corridor
                   </h3>
                   <p className="text-[11px] text-neutral-500 leading-snug">
-                    Tap truck pins on the map to view return-trip availability and capacity.
+                    Tap any truck pin on the map to view live capacity and backhaul score.
                   </p>
                 </div>
               </div>
             </div>
-
-            {/* Informational sections below the initial map viewport */}
-            <LandingOverlay />
           </div>
         )}
 
         {/* VIEW: FIND A TRUCK */}
-        {activeView === 'find_truck' && (
+        {activeView === 'find_truck' && !isMapExpanded && (
           <div className="flex items-start justify-start pt-1">
             <SearchPanel />
           </div>

@@ -10,7 +10,10 @@ import {
   Sparkles, 
   User, 
   Sun, 
-  Moon 
+  Moon,
+  Maximize2,
+  Minimize2,
+  LogOut
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -21,7 +24,10 @@ export const Navbar: React.FC = () => {
     setRole, 
     activeView, 
     setActiveView, 
-    userProfile 
+    userProfile,
+    isMapExpanded,
+    toggleMapExpanded,
+    logoutUser
   } = useApp();
 
   const handleNavClick = (view: AppView) => {
@@ -34,7 +40,7 @@ export const Navbar: React.FC = () => {
         
         {/* Brand Logo & Name */}
         <div 
-          onClick={() => handleNavClick('home')}
+          onClick={() => handleNavClick(currentRole === 'fleet_operator' ? 'find_freight' : 'home')}
           className="flex items-center gap-2.5 cursor-pointer group select-none shrink-0"
         >
           <div className="w-8 h-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black transition-transform group-hover:scale-105 shadow-sm">
@@ -50,25 +56,15 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Desktop Navigation Tabs */}
+        {/* Desktop Navigation Tabs (Strictly Role-Specific) */}
         <nav className="hidden md:flex items-center gap-1 bg-neutral-100 dark:bg-neutral-900/80 p-1 rounded-xl border border-neutral-200 dark:border-neutral-800">
-          <button
-            onClick={() => handleNavClick('home')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              activeView === 'home'
-                ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-bold'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
-            }`}
-          >
-            Home
-          </button>
-
+          
           {currentRole === 'shipper' ? (
             <>
               <button
-                onClick={() => handleNavClick('find_truck')}
+                onClick={() => handleNavClick('home')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeView === 'find_truck' || activeView === 'matching_results'
+                  activeView === 'home' || activeView === 'find_truck' || activeView === 'matching_results'
                     ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-bold'
                     : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
                 }`}
@@ -136,9 +132,32 @@ export const Navbar: React.FC = () => {
           </button>
         </nav>
 
-        {/* Right Section: Role Segment, Theme Toggle, Profile */}
+        {/* Right Section: Expand Map, Role Segment, Theme Toggle, Profile */}
         <div className="flex items-center gap-2 sm:gap-2.5">
           
+          {/* Expand / Collapse Map Viewport */}
+          <button
+            onClick={toggleMapExpanded}
+            className={`px-2.5 py-1.5 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 ${
+              isMapExpanded 
+                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white shadow-md' 
+                : 'bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white'
+            }`}
+            title={isMapExpanded ? 'Restore UI panels' : 'Maximize Map View'}
+          >
+            {isMapExpanded ? (
+              <>
+                <Minimize2 className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Collapse</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Expand Map</span>
+              </>
+            )}
+          </button>
+
           {/* Role Segment Toggle */}
           <div className="flex items-center bg-neutral-100 dark:bg-neutral-900 p-1 rounded-xl border border-neutral-200 dark:border-neutral-800">
             <button
@@ -185,6 +204,16 @@ export const Navbar: React.FC = () => {
             aria-label="Profile"
           >
             {userProfile.name.charAt(0)}
+          </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={logoutUser}
+            className="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-500 hover:text-red-500 flex items-center justify-center transition-colors"
+            title="Sign Out"
+            aria-label="Sign out"
+          >
+            <LogOut className="w-4 h-4" />
           </button>
 
         </div>

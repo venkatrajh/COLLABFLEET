@@ -5,7 +5,21 @@ import { INITIAL_USER_PROFILE } from './mockData';
 export class AuthService {
   private static currentUser: UserProfile = { ...INITIAL_USER_PROFILE };
 
+  public static isAuthenticated(): boolean {
+    try {
+      return localStorage.getItem('collabfleet_auth') === 'true';
+    } catch {
+      return false;
+    }
+  }
+
   public static getCurrentUser(): UserProfile {
+    try {
+      const savedUser = localStorage.getItem('collabfleet_user');
+      if (savedUser) {
+        return JSON.parse(savedUser);
+      }
+    } catch {}
     return { ...this.currentUser };
   }
 
@@ -14,6 +28,10 @@ export class AuthService {
       ...this.currentUser,
       role
     };
+    try {
+      localStorage.setItem('collabfleet_user', JSON.stringify(this.currentUser));
+      localStorage.setItem('collabfleet_role', role);
+    } catch {}
     return { ...this.currentUser };
   }
 
@@ -29,11 +47,24 @@ export class AuthService {
           ...this.currentUser,
           email: emailOrPhone.includes('@') ? emailOrPhone : this.currentUser.email,
           phone: !emailOrPhone.includes('@') ? emailOrPhone : this.currentUser.phone,
+          name: emailOrPhone.includes('@') ? emailOrPhone.split('@')[0] : this.currentUser.name,
           role
         };
+        try {
+          localStorage.setItem('collabfleet_auth', 'true');
+          localStorage.setItem('collabfleet_user', JSON.stringify(this.currentUser));
+          localStorage.setItem('collabfleet_role', role);
+        } catch {}
         return { ...this.currentUser };
       }
     );
+  }
+
+  public static logout(): void {
+    try {
+      localStorage.removeItem('collabfleet_auth');
+      localStorage.removeItem('collabfleet_user');
+    } catch {}
   }
 
   public static updateProfile(data: Partial<UserProfile>): UserProfile {
@@ -41,6 +72,9 @@ export class AuthService {
       ...this.currentUser,
       ...data
     };
+    try {
+      localStorage.setItem('collabfleet_user', JSON.stringify(this.currentUser));
+    } catch {}
     return { ...this.currentUser };
   }
 }

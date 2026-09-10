@@ -149,6 +149,8 @@ export interface SearchQueryParams {
 }
 
 export type AppView = 
+  | 'landing'
+  | 'login'
   | 'home'
   | 'find_truck'
   | 'matching_results'

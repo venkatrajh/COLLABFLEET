@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { useApp } from '../../context/AppContext';
 import { Truck } from '../../types';
 import { INITIAL_TRUCKS, CORRIDOR_CHENNAI_BENGALURU } from '../../services/mockData';
-import { Plus, Minus, Crosshair, RotateCcw } from 'lucide-react';
+import { Plus, Minus, Crosshair, RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
 
 export const MapView: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -23,6 +23,8 @@ export const MapView: React.FC = () => {
     setIsTruckDetailOpen,
     mapCenterTrigger,
     recenterMap,
+    isMapExpanded,
+    toggleMapExpanded,
     showToast
   } = useApp();
 
@@ -441,6 +443,20 @@ export const MapView: React.FC = () => {
           aria-label="Recenter map"
         >
           <RotateCcw className="w-4 h-4" />
+        </button>
+
+        {/* Expand / Minimize Map Toggle */}
+        <button
+          onClick={toggleMapExpanded}
+          className={`w-10 h-10 rounded-2xl border shadow-xl flex items-center justify-center transition-colors ${
+            isMapExpanded 
+              ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white' 
+              : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+          }`}
+          title={isMapExpanded ? "Restore UI Panels" : "Expand Map (Full View)"}
+          aria-label="Expand or collapse map"
+        >
+          {isMapExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
         </button>
       </div>
 

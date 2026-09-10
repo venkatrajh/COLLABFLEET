@@ -15,14 +15,13 @@ export const ProfileView: React.FC = () => {
     userProfile, 
     currentRole, 
     setRole, 
-    setIsAuthModalOpen, 
+    logoutUser,
     showToast,
     setActiveView 
   } = useApp();
 
   const handleLogout = () => {
-    showToast('Switched to demo session', 'info');
-    setIsAuthModalOpen(true);
+    logoutUser();
   };
 
   return (

@@ -25,7 +25,10 @@ interface AppContextType {
   theme: 'light' | 'dark';
   toggleTheme: () => void;
   
-  // Navigation & Role
+  // Authentication & Role
+  isAuthenticated: boolean;
+  loginUser: (emailOrPhone: string, role: UserRole) => Promise<void>;
+  logoutUser: () => void;
   currentRole: UserRole;
   setRole: (role: UserRole) => void;
   activeView: AppView;
@@ -41,9 +44,12 @@ interface AppContextType {
   aiLoadingMessage: string;
   startFreightSearch: (overrideQuery?: SearchQueryParams) => Promise<void>;
 
-  // Panel Collapsing
+  // Panel Collapsing & Expandable Map
   isSearchPanelCollapsed: boolean;
   setIsSearchPanelCollapsed: (collapsed: boolean) => void;
+  isMapExpanded: boolean;
+  setIsMapExpanded: (expanded: boolean) => void;
+  toggleMapExpanded: () => void;
 
   // Map Controls
   mapCenterTrigger: { coords: [number, number]; zoom?: number; id: number } | null;
@@ -108,9 +114,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  const [currentRole, setCurrentRoleState] = useState<UserRole>('shipper');
-  const [activeView, setActiveView] = useState<AppView>('home');
+  // Authentication state (Mock-ready and FastAPI-ready)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => AuthService.isAuthenticated());
+  const [currentRole, setCurrentRoleState] = useState<UserRole>(() => {
+    try {
+      const savedRole = localStorage.getItem('collabfleet_role') as UserRole;
+      if (savedRole === 'shipper' || savedRole === 'fleet_operator') return savedRole;
+    } catch {}
+    return 'shipper';
+  });
+
+  // Initial view: if not authenticated, start at 'landing'. If authenticated, start at 'home'.
+  const [activeView, setActiveView] = useState<AppView>(() => {
+    return AuthService.isAuthenticated() ? 'home' : 'landing';
+  });
+
   const [isSearchPanelCollapsed, setIsSearchPanelCollapsed] = useState(false);
+  const [isMapExpanded, setIsMapExpanded] = useState(false);
+
+  const toggleMapExpanded = () => {
+    setIsMapExpanded(prev => !prev);
+  };
 
   // Map center trigger for floating controls & card sync
   const [mapCenterTrigger, setMapCenterTrigger] = useState<{ coords: [number, number]; zoom?: number; id: number } | null>(null);
@@ -165,13 +189,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setUserProfile(AuthService.getCurrentUser());
   };
 
+  const loginUser = async (emailOrPhone: string, role: UserRole) => {
+    const user = await AuthService.login(emailOrPhone, role);
+    setIsAuthenticated(true);
+    setCurrentRoleState(role);
+    setUserProfile(user);
+    // Role-specific landing directly into the application
+    if (role === 'fleet_operator') {
+      setActiveView('find_freight');
+    } else {
+      setActiveView('home');
+    }
+    showToast(`Welcome ${user.name}! Signed in as ${role === 'shipper' ? 'Shipper' : 'Fleet Owner'}`, 'success');
+  };
+
+  const logoutUser = () => {
+    AuthService.logout();
+    setIsAuthenticated(false);
+    setActiveView('landing');
+    showToast('Signed out successfully', 'info');
+  };
+
   const setRole = (role: UserRole) => {
     setCurrentRoleState(role);
     AuthService.setRole(role);
     refreshUserProfile();
     showToast(`Switched to ${role === 'shipper' ? 'Shipper' : 'Fleet Owner'} Mode`, 'info');
-    if (role === 'fleet_operator' && activeView === 'find_truck') {
+    if (role === 'fleet_operator' && (activeView === 'find_truck' || activeView === 'home')) {
       setActiveView('find_freight');
+    } else if (role === 'shipper' && activeView === 'find_freight') {
+      setActiveView('home');
     }
   };
 
@@ -254,6 +301,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       value={{
         theme,
         toggleTheme,
+        isAuthenticated,
+        loginUser,
+        logoutUser,
         currentRole,
         setRole,
         activeView,
@@ -268,6 +318,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         startFreightSearch,
         isSearchPanelCollapsed,
         setIsSearchPanelCollapsed,
+        isMapExpanded,
+        setIsMapExpanded,
+        toggleMapExpanded,
         mapCenterTrigger,
         recenterMap,
         isWhyThisTruckOpen,
