@@ -65,6 +65,23 @@ export const MapView: React.FC = () => {
     };
   }, []);
 
+  // Invalidate map size on theme switch and map expansion without recreating map instance
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+    const map = mapInstanceRef.current;
+    
+    // Immediate and frame-delayed invalidation ensures tiles render cleanly after CSS filter/theme switch
+    requestAnimationFrame(() => {
+      map.invalidateSize({ animate: false });
+    });
+
+    const timer = setTimeout(() => {
+      map.invalidateSize({ animate: false });
+    }, 120);
+
+    return () => clearTimeout(timer);
+  }, [theme, isMapExpanded]);
+
   // Listen to mapCenterTrigger to flyTo or panTo
   useEffect(() => {
     if (!mapInstanceRef.current || !mapCenterTrigger) return;

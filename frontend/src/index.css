@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 antialiased overflow-x-hidden transition-colors duration-200;
+    @apply bg-[#F7F7F5] dark:bg-black text-neutral-900 dark:text-neutral-100 antialiased overflow-x-hidden transition-colors duration-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -26,11 +26,11 @@
 
 /* Minimalist Monochrome Glassmorphism */
 .glass-panel {
-  @apply bg-white/95 dark:bg-black/90 backdrop-blur-md border border-neutral-200/90 dark:border-neutral-800 shadow-xl shadow-black/5 dark:shadow-black/60 text-neutral-900 dark:text-white transition-colors duration-200;
+  @apply bg-white/95 dark:bg-black/90 backdrop-blur-md border border-neutral-200/80 dark:border-neutral-800/90 shadow-sm dark:shadow-black/60 text-neutral-900 dark:text-white transition-colors duration-200;
 }
 
 .glass-card {
-  @apply bg-white/95 dark:bg-neutral-950/90 border border-neutral-200/80 dark:border-neutral-800 shadow-sm hover:shadow-md text-neutral-900 dark:text-white transition-all duration-200;
+  @apply bg-white dark:bg-neutral-950/90 border border-neutral-200/70 dark:border-neutral-800/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:hover:border-neutral-600 text-neutral-900 dark:text-white transition-all duration-200;
 }
 
 .glass-card-hover:hover {
@@ -38,24 +38,26 @@
 }
 
 .glass-input {
-  @apply bg-neutral-100/90 dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white focus:border-black dark:focus:border-white focus:outline-none transition-all;
+  @apply bg-[#EFEFED] dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white focus:border-black dark:focus:border-white focus:outline-none transition-all;
 }
 
 .glass-modal {
   @apply bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 shadow-2xl text-neutral-900 dark:text-white;
 }
 
-/* Leaflet Map Theme Styling */
+/* Leaflet Map Theme Styling — Balanced & Stable */
 .dark .dark-map .leaflet-tile-pane {
-  filter: brightness(0.65) invert(1) contrast(1.15) hue-rotate(190deg) saturate(0.2);
+  filter: brightness(0.65) invert(1) contrast(1.1) hue-rotate(185deg) saturate(0.15);
+  transition: filter 0.3s ease;
 }
 
 .light-map .leaflet-tile-pane {
-  filter: contrast(1.02) saturate(0.95);
+  filter: brightness(1.02) contrast(1.01) saturate(0.92);
+  transition: filter 0.3s ease;
 }
 
 .leaflet-container {
-  background: #f5f5f5 !important;
+  background: #F7F7F5 !important;
   font-family: inherit !important;
   outline: none !important;
 }

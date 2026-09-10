@@ -51,10 +51,10 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 flex flex-col justify-between selection:bg-neutral-900 selection:text-white dark:selection:bg-white dark:selection:text-black">
+    <div className="min-h-screen bg-[#F7F7F5] dark:bg-black text-neutral-900 dark:text-neutral-100 flex flex-col justify-between selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
       
       {/* Top Bar */}
-      <header className="px-6 py-5 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-900 max-w-7xl mx-auto w-full">
+      <header className="px-6 py-4 flex items-center justify-between border-b border-neutral-200/80 dark:border-neutral-900 max-w-7xl mx-auto w-full">
         <button
           onClick={() => setActiveView('landing')}
           className="flex items-center gap-2 text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"

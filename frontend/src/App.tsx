@@ -66,7 +66,7 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="relative w-screen min-h-screen bg-neutral-100 dark:bg-black text-neutral-900 dark:text-neutral-100 overflow-x-hidden font-sans select-none">
+    <div className="relative w-screen min-h-screen bg-[#F7F7F5] dark:bg-black text-neutral-900 dark:text-neutral-100 overflow-x-hidden font-sans select-none">
       
       {/* 1. Core Real Leaflet Interactive Map — Full Screen Surface */}
       <MapView />
