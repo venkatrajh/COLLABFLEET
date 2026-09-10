@@ -21,7 +21,6 @@ import { ProfileView } from './components/auth/ProfileView';
 import { AuthModal } from './components/auth/AuthModal';
 import { LandingPage } from './components/landing/LandingPage';
 import { LoginPage } from './components/auth/LoginPage';
-import { CustomCursor } from './components/common/CustomCursor';
 import { ArrowLeft, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -50,7 +49,6 @@ export const App: React.FC = () => {
   if (!isAuthenticated && activeView === 'landing') {
     return (
       <div className="relative w-screen min-h-screen bg-black text-white font-sans">
-        <CustomCursor />
         <LandingPage />
         <Toast />
       </div>
@@ -61,7 +59,6 @@ export const App: React.FC = () => {
   if (!isAuthenticated && activeView === 'login') {
     return (
       <div className="relative w-screen min-h-screen bg-black text-white font-sans">
-        <CustomCursor />
         <LoginPage />
         <Toast />
       </div>
@@ -70,7 +67,6 @@ export const App: React.FC = () => {
 
   return (
     <div className="relative w-screen min-h-screen bg-[#F4F3EF] text-[#111111] overflow-x-hidden font-sans select-none">
-      <CustomCursor />
       
       {/* 1. Core Real Leaflet Interactive Map — Full Screen Surface */}
       <MapView />
