@@ -96,12 +96,13 @@
 
 /* Leaflet Map Dark Theme Styling */
 .dark-map .leaflet-tile-pane {
-  filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35);
+  filter: brightness(0.65) invert(1) contrast(1.2) hue-rotate(200deg) saturate(0.35);
 }
 
 .leaflet-container {
   background: #07090E !important;
   font-family: inherit !important;
+  outline: none !important;
 }
 
 .leaflet-control-zoom {

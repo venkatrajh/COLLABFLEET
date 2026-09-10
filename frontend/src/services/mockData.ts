@@ -293,8 +293,8 @@ export const INITIAL_TRUCKS: Truck[] = [
     totalCapacityTons: 28,
     currentLoadTons: 13,
     availableCapacityTons: 15,
-    currentLocation: INDIAN_LOCATION_HUBS[0], // Chennai
-    currentDestination: INDIAN_LOCATION_HUBS[8], // Hyderabad
+    currentLocation: INDIAN_LOCATION_HUBS[8], // Hyderabad
+    currentDestination: INDIAN_LOCATION_HUBS[4], // Bengaluru
     driver: {
       id: 'drv-5',
       name: 'Gurpreet Singh',
@@ -307,8 +307,134 @@ export const INITIAL_TRUCKS: Truck[] = [
     company: 'TransIndia Fleetways',
     pricePerKm: 26,
     isAvailable: true,
-    activeMatchesCount: 1,
+    activeMatchesCount: 3,
     routePolyline: CORRIDOR_CHENNAI_HYDERABAD
+  },
+  {
+    id: 'truck-6',
+    name: 'Tata Signa 4825.TK',
+    model: 'Signa Multi-Axle Hauler',
+    registrationNumber: 'MH 12 QX 6610',
+    truckType: 'Heavy Truck',
+    totalCapacityTons: 30,
+    currentLoadTons: 14,
+    availableCapacityTons: 16,
+    currentLocation: INDIAN_LOCATION_HUBS[9], // Mumbai
+    currentDestination: INDIAN_LOCATION_HUBS[10], // Pune
+    driver: {
+      id: 'drv-6',
+      name: 'Sachin Patil',
+      phone: '+91 98220 54321',
+      rating: 4.89,
+      tripsCompleted: 510,
+      experienceYears: 12,
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+    },
+    company: 'Sahyadri Freight Lines',
+    pricePerKm: 29,
+    isAvailable: true,
+    activeMatchesCount: 4
+  },
+  {
+    id: 'truck-7',
+    name: 'BharatBenz 1923C',
+    model: 'Medium Cargo Carrier',
+    registrationNumber: 'MH 14 TR 3302',
+    truckType: 'Medium Truck',
+    totalCapacityTons: 15,
+    currentLoadTons: 6,
+    availableCapacityTons: 9,
+    currentLocation: INDIAN_LOCATION_HUBS[10], // Pune
+    currentDestination: INDIAN_LOCATION_HUBS[4], // Bengaluru
+    driver: {
+      id: 'drv-7',
+      name: 'Ganesh Kadam',
+      phone: '+91 99210 87654',
+      rating: 4.82,
+      tripsCompleted: 390,
+      experienceYears: 8,
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'
+    },
+    company: 'Western Express Cargo',
+    pricePerKm: 23,
+    isAvailable: true,
+    activeMatchesCount: 2
+  },
+  {
+    id: 'truck-8',
+    name: 'Eicher Pro 6028',
+    model: 'Pro 6028 Container',
+    registrationNumber: 'KL 07 CD 9012',
+    truckType: 'Container Truck',
+    totalCapacityTons: 22,
+    currentLoadTons: 10,
+    availableCapacityTons: 12,
+    currentLocation: INDIAN_LOCATION_HUBS[11], // Kochi
+    currentDestination: INDIAN_LOCATION_HUBS[7], // Coimbatore
+    driver: {
+      id: 'drv-8',
+      name: 'Mathew Thomas',
+      phone: '+91 94470 12345',
+      rating: 4.91,
+      tripsCompleted: 440,
+      experienceYears: 10,
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80'
+    },
+    company: 'Malabar Logistics Network',
+    pricePerKm: 27,
+    isAvailable: true,
+    activeMatchesCount: 3
+  },
+  {
+    id: 'truck-9',
+    name: 'Ashok Leyland Captain 2518',
+    model: 'Captain Heavy Tipper',
+    registrationNumber: 'KA 03 AA 4521',
+    truckType: 'Heavy Truck',
+    totalCapacityTons: 25,
+    currentLoadTons: 12,
+    availableCapacityTons: 13,
+    currentLocation: INDIAN_LOCATION_HUBS[4], // Bengaluru
+    currentDestination: INDIAN_LOCATION_HUBS[0], // Chennai
+    driver: {
+      id: 'drv-9',
+      name: 'Manjunath Gowda',
+      phone: '+91 98450 67890',
+      rating: 4.87,
+      tripsCompleted: 620,
+      experienceYears: 13,
+      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80'
+    },
+    company: 'Karnataka Bulk Logistics',
+    pricePerKm: 25,
+    isAvailable: true,
+    activeMatchesCount: 4,
+    routePolyline: CORRIDOR_CHENNAI_BENGALURU
+  },
+  {
+    id: 'truck-10',
+    name: 'Tata Ultra T.16',
+    model: 'Ultra Cargo Carrier',
+    registrationNumber: 'TN 38 BL 8945',
+    truckType: 'Medium Truck',
+    totalCapacityTons: 16,
+    currentLoadTons: 7,
+    availableCapacityTons: 9,
+    currentLocation: INDIAN_LOCATION_HUBS[7], // Coimbatore
+    currentDestination: INDIAN_LOCATION_HUBS[0], // Chennai
+    driver: {
+      id: 'drv-10',
+      name: 'K. Palanisamy',
+      phone: '+91 94432 78901',
+      rating: 4.93,
+      tripsCompleted: 480,
+      experienceYears: 11,
+      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80'
+    },
+    company: 'Kongu Express Freight',
+    pricePerKm: 22,
+    isAvailable: true,
+    activeMatchesCount: 3
   }
 ];
 
