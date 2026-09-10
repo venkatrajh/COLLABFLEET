@@ -5,11 +5,6 @@ import {
   CheckCircle2, 
   MapPin, 
   Truck as TruckIcon, 
-  User, 
-  Clock, 
-  IndianRupee, 
-  Sparkles, 
-  ShieldCheck,
   ArrowRight,
   Loader2
 } from 'lucide-react';
@@ -42,113 +37,82 @@ export const BookingModal: React.FC = () => {
     <Modal
       isOpen={isBookingModalOpen}
       onClose={() => setIsBookingModalOpen(false)}
-      maxWidth="max-w-lg"
+      maxWidth="max-w-md"
       title={
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
-            <CheckCircle2 className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-base font-bold text-white">Confirm Your Shipment</h3>
-            <p className="text-[11px] text-slate-400 font-normal">
-              Review trip details before locking collaborative reservation
-            </p>
-          </div>
+        <div>
+          <h3 className="text-base font-extrabold text-neutral-900 dark:text-white">Confirm Your Shipment</h3>
+          <p className="text-[11px] text-neutral-500 dark:text-neutral-400 font-normal">
+            Review freight booking details before confirming
+          </p>
         </div>
       }
     >
-      <div className="space-y-4">
+      <div className="space-y-3.5 text-xs">
         
-        {/* Route Summary */}
-        <div className="p-3.5 rounded-xl bg-dark-900/90 border border-white/10 space-y-2">
+        {/* Route Card */}
+        <div className="p-3.5 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-2.5">
           <div className="flex items-start gap-2.5">
             <div className="flex flex-col items-center mt-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-brand-cyan" />
-              <span className="w-0.5 h-6 bg-slate-700 my-0.5" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+              <span className="w-2 h-2 rounded-full bg-black dark:bg-white" />
+              <span className="w-0.5 h-6 bg-neutral-300 dark:bg-neutral-700 my-0.5" />
+              <span className="w-2 h-2 rounded-full border-2 border-black dark:border-white" />
             </div>
 
-            <div className="flex-1 space-y-3">
+            <div className="flex-1 space-y-2">
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400">Pickup</span>
-                <div className="text-xs font-bold text-white">
+                <span className="text-[9px] uppercase font-bold text-neutral-400">Pickup</span>
+                <div className="text-xs font-black text-neutral-900 dark:text-white">
                   {searchQuery.fromLocation?.name || 'Chennai'}
                 </div>
-                <span className="text-[10px] text-slate-400">Today, 05:30 PM</span>
               </div>
 
               <div>
-                <span className="text-[10px] uppercase font-bold text-slate-400">Drop-off Destination</span>
-                <div className="text-xs font-bold text-white">
+                <span className="text-[9px] uppercase font-bold text-neutral-400">Destination</span>
+                <div className="text-xs font-black text-neutral-900 dark:text-white">
                   {searchQuery.toLocation?.name || 'Bengaluru'}
                 </div>
-                <span className="text-[10px] text-slate-400">Tonight, ~10:45 PM (Est. {etaMinutes} min to pickup)</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Cargo & Truck Summary */}
-        <div className="grid grid-cols-2 gap-2.5 text-xs">
-          <div className="p-3 rounded-xl bg-dark-900/60 border border-white/5 space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase">Shipment Cargo</span>
-            <div className="font-bold text-white">{searchQuery.cargoType}</div>
-            <div className="text-[11px] text-brand-cyan">{searchQuery.weightTons} Tons load</div>
+        {/* Cargo & Truck */}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-[9px] font-bold text-neutral-400 uppercase block">Cargo</span>
+            <div className="font-bold text-neutral-900 dark:text-white mt-0.5">{searchQuery.cargoType}</div>
+            <div className="text-[10px] text-neutral-500">{searchQuery.weightTons} Tons load</div>
           </div>
 
-          <div className="p-3 rounded-xl bg-dark-900/60 border border-white/5 space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase">Assigned Truck</span>
-            <div className="font-bold text-white truncate">{truck.name}</div>
-            <div className="text-[11px] text-slate-400 truncate">{truck.registrationNumber}</div>
-          </div>
-        </div>
-
-        {/* Driver Snapshot */}
-        <div className="p-3 rounded-xl bg-dark-900/60 border border-white/5 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-dark-800 flex items-center justify-center text-brand-cyan font-bold text-xs border border-white/10">
-              <User className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-white">{truck.driver.name}</div>
-              <div className="text-[10px] text-slate-400">⭐ {truck.driver.rating} · {truck.company}</div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1 text-[11px] font-bold text-brand-cyan px-2 py-0.5 rounded-full bg-brand-cyan/10 border border-brand-cyan/30">
-            <Sparkles className="w-3 h-3" />
-            <span>{matchScore}% AI Match</span>
+          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-[9px] font-bold text-neutral-400 uppercase block">Truck & Driver</span>
+            <div className="font-bold text-neutral-900 dark:text-white mt-0.5 truncate">{truck.name}</div>
+            <div className="text-[10px] text-neutral-500 truncate">{truck.driver.name} (★ {truck.driver.rating})</div>
           </div>
         </div>
 
         {/* Price Breakdown */}
-        <div className="p-3.5 rounded-xl bg-dark-950/80 border border-brand-cyan/20 space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Base Collaborative Freight Fare</span>
-            <span className="font-mono text-slate-200">₹{Math.round(estimatedPrice * 0.88).toLocaleString('en-IN')}</span>
+        <div className="p-3.5 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-1.5">
+          <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
+            <span>Base Collaborative Fare</span>
+            <span className="font-mono text-neutral-900 dark:text-white font-semibold">₹{Math.round(estimatedPrice * 0.88).toLocaleString('en-IN')}</span>
           </div>
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Toll & Fuel Surcharge</span>
-            <span className="font-mono text-slate-200">₹{Math.round(estimatedPrice * 0.12).toLocaleString('en-IN')}</span>
+          <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
+            <span>Tolls & Fuel</span>
+            <span className="font-mono text-neutral-900 dark:text-white font-semibold">₹{Math.round(estimatedPrice * 0.12).toLocaleString('en-IN')}</span>
           </div>
-          <div className="flex items-center justify-between text-xs text-emerald-400 font-semibold">
-            <span>Return Trip Collaborative Discount</span>
-            <span className="font-mono">-₹{selectedMatch.savingsAmount.toLocaleString('en-IN')}</span>
-          </div>
-          <div className="flex items-center justify-between pt-2 border-t border-white/10 text-sm font-extrabold text-white">
+          <div className="flex items-center justify-between pt-1.5 border-t border-neutral-200 dark:border-neutral-800 text-sm font-extrabold text-neutral-900 dark:text-white">
             <span>Total Payable</span>
-            <span className="text-base text-brand-cyan font-black">
-              ₹{estimatedPrice.toLocaleString('en-IN')}
-            </span>
+            <span className="text-base font-black">₹{estimatedPrice.toLocaleString('en-IN')}</span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-3 border-t border-white/10 gap-3">
+        <div className="flex items-center justify-between pt-2 border-t border-neutral-200 dark:border-neutral-800 gap-2.5">
           <button
             type="button"
             onClick={() => setIsBookingModalOpen(false)}
-            className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+            className="px-4 py-2.5 rounded-xl text-xs font-semibold text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white"
           >
             Change Truck
           </button>
@@ -157,12 +121,12 @@ export const BookingModal: React.FC = () => {
             type="button"
             onClick={handleConfirm}
             disabled={isSubmitting}
-            className="flex-1 py-3 px-5 rounded-xl bg-gradient-to-r from-brand-cyan via-sky-500 to-blue-600 text-dark-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/25 hover:opacity-95 transition-all disabled:opacity-50"
+            className="flex-1 py-3 px-5 rounded-2xl bg-black text-white dark:bg-white dark:text-black font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow hover:opacity-90 active:scale-[0.99] transition-all disabled:opacity-50"
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin text-dark-950" />
-                <span>Confirming Booking...</span>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Confirming...</span>
               </>
             ) : (
               <>

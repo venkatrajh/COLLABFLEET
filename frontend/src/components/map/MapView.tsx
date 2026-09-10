@@ -4,29 +4,32 @@ import 'leaflet/dist/leaflet.css';
 import { useApp } from '../../context/AppContext';
 import { Truck } from '../../types';
 import { INITIAL_TRUCKS, CORRIDOR_CHENNAI_BENGALURU } from '../../services/mockData';
+import { Plus, Minus, Crosshair, RotateCcw } from 'lucide-react';
 
 export const MapView: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersLayerRef = useRef<L.LayerGroup | null>(null);
   const routePolylineRef = useRef<L.Polyline | null>(null);
-  const routeGlowPolylineRef = useRef<L.Polyline | null>(null);
 
   const { 
+    theme,
     searchQuery, 
     matchingResults, 
     selectedMatch, 
     setSelectedMatch,
     activeView,
     activeTrackingShipment,
-    setIsTruckDetailOpen
+    setIsTruckDetailOpen,
+    mapCenterTrigger,
+    recenterMap,
+    showToast
   } = useApp();
 
-  // Initialize Leaflet Map once with standard OpenStreetMap tiles (100% Free, NO API KEY)
+  // Initialize Leaflet Map once with OpenStreetMap
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
-    // Center around South India freight corridor (Latitude: 13.08, Longitude: 80.27, Zoom: 6)
     const initialCenter: [number, number] = [13.08, 80.27];
     const map = L.map(mapContainerRef.current, {
       center: initialCenter,
@@ -35,37 +38,40 @@ export const MapView: React.FC = () => {
       attributionControl: true
     });
 
-    // Standard OpenStreetMap Tile Layer - NO API KEY REQUIRED
+    // Standard OpenStreetMap Tile Layer (100% Free, NO API KEY)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19,
       subdomains: ['a', 'b', 'c']
     }).addTo(map);
-
-    // Zoom controls positioned at bottom right
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
 
     const markersLayer = L.layerGroup().addTo(map);
     markersLayerRef.current = markersLayer;
     mapInstanceRef.current = map;
 
-    // Force size invalidation to ensure Leaflet renders full bounds immediately
-    const timer1 = setTimeout(() => map.invalidateSize(), 100);
-    const timer2 = setTimeout(() => map.invalidateSize(), 500);
+    // Invalidate size on mount to ensure full canvas coverage
+    setTimeout(() => map.invalidateSize(), 150);
+    setTimeout(() => map.invalidateSize(), 500);
 
     const handleResize = () => map.invalidateSize();
     window.addEventListener('resize', handleResize);
 
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
       window.removeEventListener('resize', handleResize);
       map.remove();
       mapInstanceRef.current = null;
     };
   }, []);
 
-  // Update Markers, Routes, and Telemetry dynamically
+  // Listen to mapCenterTrigger to flyTo or panTo
+  useEffect(() => {
+    if (!mapInstanceRef.current || !mapCenterTrigger) return;
+    mapInstanceRef.current.flyTo(mapCenterTrigger.coords, mapCenterTrigger.zoom || 8, {
+      duration: 1
+    });
+  }, [mapCenterTrigger]);
+
+  // Update Markers, Route, and Telemetry dynamically
   useEffect(() => {
     const map = mapInstanceRef.current;
     const markersLayer = markersLayerRef.current;
@@ -77,46 +83,47 @@ export const MapView: React.FC = () => {
       routePolylineRef.current.remove();
       routePolylineRef.current = null;
     }
-    if (routeGlowPolylineRef.current) {
-      routeGlowPolylineRef.current.remove();
-      routeGlowPolylineRef.current = null;
-    }
 
     const boundsPoints: [number, number][] = [];
+    const isDark = theme === 'dark';
 
-    // Helper: Create custom HTML pin icon
-    const createPinIcon = (label: string, colorClass: string, isDest: boolean = false) => {
+    // Helper: Minimalist monochrome pin
+    const createPinIcon = (label: string, isDest: boolean = false) => {
       return L.divIcon({
         className: 'custom-pin-marker',
         html: `
-          <div class="relative flex items-center justify-center pointer-events-auto">
-            <div class="absolute -top-1 w-7 h-7 rounded-full ${colorClass} opacity-30 animate-ping"></div>
-            <div class="w-8 h-8 rounded-full ${colorClass} text-dark-950 flex items-center justify-center font-black text-xs shadow-lg border-2 border-white/90 z-10">
-              ${isDest ? '●' : '▲'}
+          <div class="relative flex flex-col items-center pointer-events-auto">
+            <div class="w-7 h-7 rounded-full ${
+              isDest 
+                ? (isDark ? 'bg-white text-black border-2 border-black' : 'bg-black text-white border-2 border-white')
+                : (isDark ? 'bg-neutral-200 text-black border-2 border-black' : 'bg-neutral-900 text-white border-2 border-white')
+            } flex items-center justify-center font-bold text-xs shadow-lg">
+              ${isDest ? 'B' : 'A'}
             </div>
-            <div class="absolute -bottom-6 bg-dark-900/95 text-white text-[10px] font-bold px-2 py-0.5 rounded-md border border-white/20 shadow-xl whitespace-nowrap z-20">
+            <div class="mt-1 px-2 py-0.5 rounded-md ${
+              isDark ? 'bg-black/90 text-white border border-neutral-800' : 'bg-white/95 text-black border border-neutral-300'
+            } text-[10px] font-bold shadow-md whitespace-nowrap">
               ${label}
             </div>
           </div>
         `,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
+        iconSize: [28, 46],
+        iconAnchor: [14, 23]
       });
     };
 
-    // Helper: Create custom truck icon
+    // Helper: Clean monochrome truck marker (Lucide truck SVG)
     const createTruckIcon = (truck: Truck, isSelected: boolean, matchScore?: number) => {
+      const bgClass = isSelected
+        ? (isDark ? 'bg-white text-black ring-4 ring-white/30 scale-110' : 'bg-black text-white ring-4 ring-black/20 scale-110')
+        : (isDark ? 'bg-neutral-900 text-neutral-200 border border-neutral-700 hover:border-white' : 'bg-white text-neutral-800 border border-neutral-300 hover:border-black');
+
       return L.divIcon({
         className: 'custom-truck-marker',
         html: `
           <div class="relative flex flex-col items-center cursor-pointer group pointer-events-auto">
-            ${isSelected ? '<div class="absolute -inset-2 rounded-full bg-brand-cyan/40 animate-ping"></div>' : ''}
-            <div class="w-10 h-10 rounded-xl ${
-              isSelected 
-                ? 'bg-gradient-to-tr from-brand-cyan to-blue-500 shadow-glass-glow border-2 border-white scale-110' 
-                : 'bg-dark-850/95 border border-white/30 shadow-lg hover:border-brand-cyan hover:scale-105'
-            } flex items-center justify-center transition-all z-10">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ${isSelected ? 'text-dark-950' : 'text-brand-cyan'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="w-9 h-9 rounded-xl ${bgClass} flex items-center justify-center transition-all shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
                 <path d="M15 18H9"/>
                 <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
@@ -125,77 +132,75 @@ export const MapView: React.FC = () => {
               </svg>
             </div>
             ${matchScore ? `
-              <div class="mt-1 bg-dark-950/95 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full border ${
-                isSelected ? 'border-brand-cyan text-brand-cyan' : 'border-white/20'
-              } shadow-md whitespace-nowrap z-20">
-                ${matchScore}% AI
+              <div class="mt-1 px-1.5 py-0.5 rounded ${
+                isSelected 
+                  ? (isDark ? 'bg-white text-black font-extrabold' : 'bg-black text-white font-extrabold')
+                  : (isDark ? 'bg-black/90 text-white border border-neutral-800' : 'bg-white text-black border border-neutral-300')
+              } text-[9px] font-bold shadow whitespace-nowrap">
+                ${matchScore}% Match
               </div>
             ` : `
-              <div class="mt-0.5 bg-dark-950/90 text-slate-300 text-[9px] font-semibold px-1.5 py-0.2 rounded border border-white/10 whitespace-nowrap z-20">
+              <div class="mt-0.5 px-1 py-0.2 rounded ${
+                isDark ? 'bg-black/85 text-neutral-300 border border-neutral-800' : 'bg-white/90 text-neutral-700 border border-neutral-300'
+              } text-[8px] font-semibold whitespace-nowrap">
                 ${truck.availableCapacityTons}T avail
               </div>
             `}
           </div>
         `,
-        iconSize: [40, 48],
-        iconAnchor: [20, 24]
+        iconSize: [36, 46],
+        iconAnchor: [18, 23]
       });
     };
 
-    // 1. Always Plot Pickup Location (default: Chennai)
+    // 1. Pickup Location
     if (searchQuery.fromLocation) {
       const coords = searchQuery.fromLocation.coordinates;
       boundsPoints.push(coords);
       const marker = L.marker(coords, {
-        icon: createPinIcon(searchQuery.fromLocation.name, 'bg-brand-cyan', false)
+        icon: createPinIcon(searchQuery.fromLocation.name, false)
       }).bindTooltip(`Pickup: ${searchQuery.fromLocation.name}`);
       markersLayer.addLayer(marker);
     }
 
-    // 2. Always Plot Destination Location (default: Bengaluru)
+    // 2. Destination Location
     if (searchQuery.toLocation) {
       const coords = searchQuery.toLocation.coordinates;
       boundsPoints.push(coords);
       const marker = L.marker(coords, {
-        icon: createPinIcon(searchQuery.toLocation.name, 'bg-emerald-400', true)
+        icon: createPinIcon(searchQuery.toLocation.name, true)
       }).bindTooltip(`Destination: ${searchQuery.toLocation.name}`);
       markersLayer.addLayer(marker);
     }
 
-    // 3. In Tracking Mode: Draw live route and animated moving truck
+    // Route color based on theme
+    const routeColor = isDark ? '#F5F5F5' : '#171717';
+
+    // 3. In Tracking Mode: Draw live route and moving truck
     if (activeView === 'track_shipment' && activeTrackingShipment) {
       const route = activeTrackingShipment.truck?.routePolyline || CORRIDOR_CHENNAI_BENGALURU;
       
-      // Draw background glow and main route line
-      const bgPoly = L.polyline(route, {
-        color: '#0284C7',
-        weight: 6,
-        opacity: 0.5,
-        lineCap: 'round'
-      }).addTo(markersLayer);
-
       const poly = L.polyline(route, {
-        color: '#00F2FE',
+        color: routeColor,
         weight: 4,
-        opacity: 0.95,
+        opacity: 0.9,
         lineCap: 'round',
-        dashArray: '2, 8'
+        dashArray: '3, 6'
       }).addTo(markersLayer);
-
-      routeGlowPolylineRef.current = bgPoly;
       routePolylineRef.current = poly;
       boundsPoints.push(...route);
 
-      // Plot live moving truck position
+      // Live truck marker
       const livePos = activeTrackingShipment.currentTrackingPosition || route[Math.floor(route.length / 2)];
       const liveTruckMarker = L.marker(livePos, {
         icon: L.divIcon({
-          className: 'live-tracking-marker',
+          className: 'live-tracking-marker pointer-events-auto',
           html: `
             <div class="relative flex flex-col items-center">
-              <div class="absolute -inset-3 rounded-full bg-brand-cyan/30 animate-ping"></div>
-              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-cyan to-blue-600 flex items-center justify-center text-dark-950 shadow-glass-glow border-2 border-white live-truck-glow z-20">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <div class="w-11 h-11 rounded-2xl ${
+                isDark ? 'bg-white text-black ring-4 ring-white/30' : 'bg-black text-white ring-4 ring-black/20'
+              } flex items-center justify-center shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 stroke-[2.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                   <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
                   <path d="M15 18H9"/>
                   <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
@@ -203,23 +208,25 @@ export const MapView: React.FC = () => {
                   <circle cx="7" cy="18" r="2"/>
                 </svg>
               </div>
-              <div class="mt-1 bg-dark-950/95 text-brand-cyan text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-brand-cyan/40 shadow-xl whitespace-nowrap z-30">
-                IN TRANSIT · 58 km/h
+              <div class="mt-1 px-2 py-0.5 rounded-full ${
+                isDark ? 'bg-black text-white border border-neutral-700' : 'bg-white text-black border border-neutral-300'
+              } text-[9px] font-extrabold shadow-md whitespace-nowrap">
+                In Transit · 58 km/h
               </div>
             </div>
           `,
-          iconSize: [48, 54],
-          iconAnchor: [24, 27]
+          iconSize: [44, 50],
+          iconAnchor: [22, 25]
         })
       });
       markersLayer.addLayer(liveTruckMarker);
     }
-    // 4. In Matching Results View: Draw selected match route & matched trucks
+    // 4. In Matching Results View
     else if (activeView === 'matching_results' && matchingResults.length > 0) {
       const activeRoute = selectedMatch?.truck.routePolyline || CORRIDOR_CHENNAI_BENGALURU;
       
       const poly = L.polyline(activeRoute, {
-        color: '#00F2FE',
+        color: routeColor,
         weight: 4,
         opacity: 0.9,
         lineCap: 'round'
@@ -237,28 +244,45 @@ export const MapView: React.FC = () => {
           icon: createTruckIcon(truck, isSelected, match.matchScore)
         });
 
+        // Click popup similar to ride-booking app
+        marker.bindPopup(`
+          <div style="font-family: inherit; min-width: 170px; padding: 2px;">
+            <div style="font-weight: 800; font-size: 13px; color: ${isDark ? '#fff' : '#000'};">
+              ${truck.name}
+            </div>
+            <div style="font-size: 11px; color: ${isDark ? '#aaa' : '#666'}; margin-top: 2px;">
+              ${truck.availableCapacityTons} tons available · ${match.etaMinutes} min away
+            </div>
+            <div style="font-weight: 800; font-size: 14px; margin-top: 6px; color: ${isDark ? '#fff' : '#000'};">
+              ₹${match.estimatedPrice.toLocaleString('en-IN')}
+              <span style="font-size: 10px; font-weight: bold; background: ${isDark ? '#333' : '#eee'}; padding: 2px 6px; border-radius: 4px; margin-left: 4px;">
+                ${match.matchScore}% Match
+              </span>
+            </div>
+          </div>
+        `, {
+          className: isDark ? 'dark-leaflet-popup' : 'light-leaflet-popup'
+        });
+
         marker.on('click', () => {
           setSelectedMatch(match);
-          setIsTruckDetailOpen(true);
         });
 
         markersLayer.addLayer(marker);
       });
     }
-    // 5. Default Home / Search / General View: Always show Chennai -> Bengaluru Route + Regional Demo Trucks
+    // 5. Default Home / Search View
     else {
-      // Draw visible corridor route between Chennai and Bengaluru
       const defaultRoute = CORRIDOR_CHENNAI_BENGALURU;
       const poly = L.polyline(defaultRoute, {
-        color: '#00F2FE',
-        weight: 4,
+        color: routeColor,
+        weight: 3.5,
         opacity: 0.85,
         lineCap: 'round'
       }).addTo(markersLayer);
       routePolylineRef.current = poly;
       boundsPoints.push(...defaultRoute);
 
-      // Plot all regional demo trucks across Chennai, Bengaluru, Coimbatore, Hyderabad, Mumbai, Pune, Kochi
       INITIAL_TRUCKS.forEach(truck => {
         const coords = truck.currentLocation.coordinates;
         boundsPoints.push(coords);
@@ -268,13 +292,25 @@ export const MapView: React.FC = () => {
           icon: createTruckIcon(truck, isSelected)
         });
 
+        marker.bindPopup(`
+          <div style="font-family: inherit; min-width: 160px; padding: 2px;">
+            <div style="font-weight: 800; font-size: 12px; color: ${isDark ? '#fff' : '#000'};">
+              ${truck.name}
+            </div>
+            <div style="font-size: 11px; color: ${isDark ? '#aaa' : '#666'}; margin-top: 2px;">
+              ${truck.availableCapacityTons} tons available · ${truck.currentLocation.name}
+            </div>
+            <div style="font-size: 11px; font-weight: 700; margin-top: 4px; color: ${isDark ? '#ddd' : '#333'};">
+              Driver: ${truck.driver.name} (★ ${truck.driver.rating})
+            </div>
+          </div>
+        `);
+
         marker.on('click', () => {
-          // If truck exists in matching results, select it; otherwise find or wrap it
           const foundMatch = matchingResults.find(m => m.truck.id === truck.id);
           if (foundMatch) {
             setSelectedMatch(foundMatch);
           } else {
-            // Provide a mock match context so truck details open smoothly
             setSelectedMatch({
               truck,
               matchScore: 92,
@@ -297,40 +333,117 @@ export const MapView: React.FC = () => {
                 bulletPoints: [
                   `Capacity matches your requirements (${truck.availableCapacityTons} tons available)`,
                   `Stationed near ${truck.currentLocation.name}`,
-                  `Reliable driver: ${truck.driver.name} (⭐ ${truck.driver.rating})`,
+                  `Reliable driver: ${truck.driver.name} (★ ${truck.driver.rating})`,
                   `Return trip capability along key highway corridors`
                 ]
               }
             });
           }
-          setIsTruckDetailOpen(true);
         });
 
         markersLayer.addLayer(marker);
       });
     }
 
-    // Auto-fit map bounds when locations are set, or keep nice South India view
+    // Auto-fit on matching results or tracking
     if (boundsPoints.length > 1 && (activeView === 'matching_results' || activeView === 'track_shipment')) {
       map.fitBounds(L.latLngBounds(boundsPoints), {
-        padding: [90, 90],
-        maxZoom: 12,
+        padding: [80, 80],
+        maxZoom: 11,
         animate: true,
-        duration: 0.6
+        duration: 0.5
       });
     }
-  }, [searchQuery, matchingResults, selectedMatch, activeView, activeTrackingShipment]);
+  }, [theme, searchQuery, matchingResults, selectedMatch, activeView, activeTrackingShipment]);
+
+  // Map Controls Handlers (Zoom in, Zoom out, Geolocation, Recenter)
+  const handleZoomIn = () => {
+    mapInstanceRef.current?.zoomIn();
+  };
+
+  const handleZoomOut = () => {
+    mapInstanceRef.current?.zoomOut();
+  };
+
+  const handleLocateMe = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const userCoords: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+          mapInstanceRef.current?.flyTo(userCoords, 12);
+          showToast('Centered on your current location', 'info');
+        },
+        () => {
+          // Graceful fallback to Chennai
+          mapInstanceRef.current?.flyTo([13.0827, 80.2707], 10);
+          showToast('Centered on Chennai Hub (Location permission denied)', 'info');
+        }
+      );
+    } else {
+      mapInstanceRef.current?.flyTo([13.0827, 80.2707], 10);
+      showToast('Centered on Chennai Hub', 'info');
+    }
+  };
+
+  const handleRecenter = () => {
+    recenterMap([13.08, 80.27], 6);
+    showToast('Map recentered to South India freight corridor', 'info');
+  };
 
   return (
-    <div className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-dark-950">
+    <div className="fixed inset-0 w-full h-full z-0 overflow-hidden">
+      
+      {/* Real Leaflet Map */}
       <div 
         ref={mapContainerRef} 
-        className="w-full h-full dark-map"
+        className={`w-full h-full ${theme === 'dark' ? 'dark-map' : 'light-map'}`}
         style={{ height: '100vh', width: '100vw' }}
       />
 
-      {/* Subtle vignette gradient overlay that leaves map visible behind glass panels */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-dark-950/80 via-transparent to-dark-950/40 opacity-70" />
+      {/* Floating Map Controls (Right Side - Uber/Ola style) */}
+      <div className="fixed right-4 sm:right-6 bottom-24 sm:bottom-10 z-30 flex flex-col items-center gap-2 pointer-events-auto">
+        
+        {/* Zoom In/Out Cluster */}
+        <div className="flex flex-col rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl overflow-hidden">
+          <button
+            onClick={handleZoomIn}
+            className="w-10 h-10 flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors border-b border-neutral-200 dark:border-neutral-800"
+            title="Zoom In"
+            aria-label="Zoom in"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+          <button
+            onClick={handleZoomOut}
+            className="w-10 h-10 flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            title="Zoom Out"
+            aria-label="Zoom out"
+          >
+            <Minus className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Current Location (Locate Me) */}
+        <button
+          onClick={handleLocateMe}
+          className="w-10 h-10 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          title="My Location"
+          aria-label="My location"
+        >
+          <Crosshair className="w-4 h-4" />
+        </button>
+
+        {/* Recenter Corridor */}
+        <button
+          onClick={handleRecenter}
+          className="w-10 h-10 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          title="Recenter Map"
+          aria-label="Recenter map"
+        >
+          <RotateCcw className="w-4 h-4" />
+        </button>
+      </div>
+
     </div>
   );
 };

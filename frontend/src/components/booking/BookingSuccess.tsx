@@ -1,16 +1,7 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { Modal } from '../common/Modal';
-import { 
-  CheckCircle2, 
-  MapPin, 
-  Truck as TruckIcon, 
-  User, 
-  Navigation, 
-  Share2, 
-  ArrowRight,
-  Sparkles
-} from 'lucide-react';
+import { Check, Truck, Navigation, Share2, ArrowRight } from 'lucide-react';
 
 export const BookingSuccess: React.FC = () => {
   const { 
@@ -34,72 +25,57 @@ export const BookingSuccess: React.FC = () => {
       onClose={() => setIsBookingSuccessOpen(false)}
       maxWidth="max-w-md"
     >
-      <div className="text-center space-y-4 py-2">
+      <div className="text-center space-y-4 py-1">
         
-        {/* Animated Success Badge */}
-        <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center text-emerald-400 mx-auto shadow-glass-glow animate-bounce-short">
-          <CheckCircle2 className="w-9 h-9 stroke-[2.5]" />
+        {/* Checkmark Icon Badge */}
+        <div className="w-12 h-12 rounded-2xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center mx-auto shadow-xl">
+          <Check className="w-6 h-6 stroke-[3]" />
         </div>
 
         <div>
-          <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
             Booking Confirmed
           </span>
-          <h2 className="text-2xl font-black text-white mt-0.5">
+          <h2 className="text-2xl font-black text-neutral-900 dark:text-white mt-0.5 tracking-tight font-mono">
             {activeBookingShipment.trackingNumber}
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Driver is dispatched and preparing for pickup
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+            Driver is assigned and heading to pickup location
           </p>
         </div>
 
         {/* Receipt Card */}
-        <div className="p-4 rounded-2xl bg-dark-900/90 border border-white/10 text-left space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-white/5">
-            <div className="flex items-center gap-2">
-              <TruckIcon className="w-4 h-4 text-brand-cyan" />
-              <span className="text-xs font-bold text-white">
-                {activeBookingShipment.truck?.name || 'Ashok Leyland 1618'}
-              </span>
-            </div>
-            <span className="text-xs font-extrabold text-emerald-400 font-mono">
+        <div className="p-4 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-left space-y-2.5 text-xs">
+          <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
+            <span className="font-extrabold text-neutral-900 dark:text-white">
+              {activeBookingShipment.truck?.name || 'Ashok Leyland 1618'}
+            </span>
+            <span className="font-mono font-black text-neutral-900 dark:text-white text-sm">
               ₹{activeBookingShipment.price.toLocaleString('en-IN')}
             </span>
           </div>
 
-          <div className="text-xs space-y-1.5">
-            <div className="flex items-center justify-between text-slate-400">
+          <div className="space-y-1 text-neutral-600 dark:text-neutral-400">
+            <div className="flex justify-between">
               <span>Driver:</span>
-              <span className="text-slate-200 font-semibold">
-                {activeBookingShipment.truck?.driver.name || 'Rajesh Kumar'}
-              </span>
+              <span className="font-semibold text-neutral-900 dark:text-white">{activeBookingShipment.truck?.driver.name || 'Rajesh Kumar'}</span>
             </div>
-            <div className="flex items-center justify-between text-slate-400">
-              <span>Pickup:</span>
-              <span className="text-slate-200 font-semibold">{activeBookingShipment.fromLocation.name}</span>
+            <div className="flex justify-between">
+              <span>Route:</span>
+              <span className="font-semibold text-neutral-900 dark:text-white">{activeBookingShipment.fromLocation.name} → {activeBookingShipment.toLocation.name}</span>
             </div>
-            <div className="flex items-center justify-between text-slate-400">
-              <span>Destination:</span>
-              <span className="text-slate-200 font-semibold">{activeBookingShipment.toLocation.name}</span>
-            </div>
-            <div className="flex items-center justify-between text-slate-400">
-              <span>Cargo:</span>
-              <span className="text-slate-200 font-semibold">
-                {activeBookingShipment.cargoType} ({activeBookingShipment.weightTons} T)
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-slate-400">
+            <div className="flex justify-between">
               <span>Estimated Arrival:</span>
-              <span className="text-brand-cyan font-bold">{activeBookingShipment.estimatedDeliveryTime}</span>
+              <span className="font-semibold text-neutral-900 dark:text-white">{activeBookingShipment.estimatedDeliveryTime || 'Tonight'}</span>
             </div>
           </div>
         </div>
 
-        {/* Buttons: Track Shipment & Share */}
+        {/* Buttons */}
         <div className="pt-2 space-y-2">
           <button
             onClick={() => handleTrackShipment(activeBookingShipment)}
-            className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-brand-cyan via-sky-500 to-blue-600 text-dark-950 font-black text-sm tracking-wide shadow-xl shadow-cyan-500/25 hover:opacity-95 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3.5 px-6 rounded-2xl bg-black text-white dark:bg-white dark:text-black font-extrabold text-xs sm:text-sm tracking-wide shadow-lg hover:opacity-90 transition-all flex items-center justify-center gap-2"
           >
             <Navigation className="w-4 h-4" />
             <span>Track Shipment</span>
@@ -108,10 +84,10 @@ export const BookingSuccess: React.FC = () => {
 
           <button
             onClick={handleShare}
-            className="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors flex items-center justify-center gap-1.5"
+            className="w-full py-2 px-4 rounded-xl text-xs font-semibold text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors flex items-center justify-center gap-1.5"
           >
             <Share2 className="w-3.5 h-3.5" />
-            <span>Share Tracking Details</span>
+            <span>Share Tracking</span>
           </button>
         </div>
 

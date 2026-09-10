@@ -21,6 +21,10 @@ interface ToastData {
 }
 
 interface AppContextType {
+  // Theme
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+  
   // Navigation & Role
   currentRole: UserRole;
   setRole: (role: UserRole) => void;
@@ -36,6 +40,14 @@ interface AppContextType {
   isAiLoading: boolean;
   aiLoadingMessage: string;
   startFreightSearch: (overrideQuery?: SearchQueryParams) => Promise<void>;
+
+  // Panel Collapsing
+  isSearchPanelCollapsed: boolean;
+  setIsSearchPanelCollapsed: (collapsed: boolean) => void;
+
+  // Map Controls
+  mapCenterTrigger: { coords: [number, number]; zoom?: number; id: number } | null;
+  recenterMap: (coords?: [number, number], zoom?: number) => void;
 
   // Modals & Panels
   isWhyThisTruckOpen: boolean;
@@ -70,8 +82,43 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Theme state with localStorage persistence (Default: dark)
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try {
+      const saved = localStorage.getItem('collabfleet_theme');
+      if (saved === 'light' || saved === 'dark') return saved;
+      return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('collabfleet_theme', theme);
+    } catch {}
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   const [currentRole, setCurrentRoleState] = useState<UserRole>('shipper');
   const [activeView, setActiveView] = useState<AppView>('home');
+  const [isSearchPanelCollapsed, setIsSearchPanelCollapsed] = useState(false);
+
+  // Map center trigger for floating controls & card sync
+  const [mapCenterTrigger, setMapCenterTrigger] = useState<{ coords: [number, number]; zoom?: number; id: number } | null>(null);
+
+  const recenterMap = (coords?: [number, number], zoom?: number) => {
+    const targetCoords = coords || (searchQuery.fromLocation ? searchQuery.fromLocation.coordinates : [13.0827, 80.2707]);
+    setMapCenterTrigger({ coords: targetCoords, zoom: zoom || 7, id: Date.now() });
+  };
 
   // Search defaults: Chennai to Bengaluru, Electronics, 8 tons
   const [searchQuery, setSearchQuery] = useState<SearchQueryParams>({
@@ -122,7 +169,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCurrentRoleState(role);
     AuthService.setRole(role);
     refreshUserProfile();
-    showToast(`Switched mode to ${role === 'shipper' ? 'Shipper' : 'Fleet Operator'}`, 'info');
+    showToast(`Switched to ${role === 'shipper' ? 'Shipper' : 'Fleet Owner'} Mode`, 'info');
     if (role === 'fleet_operator' && activeView === 'find_truck') {
       setActiveView('find_freight');
     }
@@ -132,20 +179,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const startFreightSearch = async (overrideQuery?: SearchQueryParams) => {
     const queryToUse = overrideQuery || searchQuery;
     setIsAiLoading(true);
-    setActiveView('find_truck');
 
     const steps = [
       'Finding nearby trucks...',
       'Checking available space...',
       'Comparing routes...',
       'Looking for return-trip opportunities...',
-      'Calculating your best matches...'
+      'Calculating best matches...'
     ];
 
     for (let i = 0; i < steps.length; i++) {
       setAiLoadingMessage(steps[i]);
-      // Rotate message every ~450ms for a lively 2.2s AI matching experience
-      await new Promise(r => setTimeout(r, 450));
+      await new Promise(r => setTimeout(r, 400));
     }
 
     try {
@@ -156,7 +201,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       setIsAiLoading(false);
       setActiveView('matching_results');
-      showToast(`Found ${results.length} compatible trucks with AI explainability`, 'success');
+      showToast(`Found ${results.length} available trucks on this corridor`, 'success');
     } catch (err) {
       setIsAiLoading(false);
       showToast('Error calculating matches. Please try again.', 'error');
@@ -190,7 +235,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setActiveTrackingShipment(newShipment);
     setIsBookingModalOpen(false);
     setIsBookingSuccessOpen(true);
-    showToast(`Booking ${newShipment.trackingNumber} confirmed successfully!`, 'success');
+    showToast(`Booking ${newShipment.trackingNumber} confirmed!`, 'success');
     return newShipment;
   };
 
@@ -201,12 +246,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIsTruckDetailOpen(false);
     setIsWhyThisTruckOpen(false);
     setActiveView('track_shipment');
-    showToast(`Tracking active for ${target.trackingNumber}`, 'info');
+    showToast(`Tracking live telemetry for ${target.trackingNumber}`, 'info');
   };
 
   return (
     <AppContext.Provider
       value={{
+        theme,
+        toggleTheme,
         currentRole,
         setRole,
         activeView,
@@ -219,6 +266,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         isAiLoading,
         aiLoadingMessage,
         startFreightSearch,
+        isSearchPanelCollapsed,
+        setIsSearchPanelCollapsed,
+        mapCenterTrigger,
+        recenterMap,
         isWhyThisTruckOpen,
         setIsWhyThisTruckOpen,
         isTruckDetailOpen,

@@ -1,20 +1,14 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { Modal } from '../common/Modal';
-import { CollaborationBadge } from './CollaborationBadge';
-import { ReturnTripBadge } from './ReturnTripBadge';
 import { 
   Truck as TruckIcon, 
   User, 
-  Phone, 
   Star, 
   MapPin, 
   Clock, 
   Navigation, 
-  IndianRupee, 
-  Sparkles,
   ShieldCheck,
-  CheckCircle2,
   ArrowRight
 } from 'lucide-react';
 
@@ -33,7 +27,6 @@ export const TruckDetailModal: React.FC = () => {
   const { 
     truck, 
     matchScore, 
-    collaborationScore, 
     estimatedPrice, 
     distanceKm, 
     etaMinutes, 
@@ -48,144 +41,130 @@ export const TruckDetailModal: React.FC = () => {
     <Modal
       isOpen={isTruckDetailOpen}
       onClose={() => setIsTruckDetailOpen(false)}
-      maxWidth="max-w-2xl"
+      maxWidth="max-w-xl"
       title={
         <div className="flex items-center justify-between w-full pr-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-brand-cyan/20 border border-brand-cyan/40 flex items-center justify-center text-brand-cyan">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-bold">
               <TruckIcon className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">{truck.name}</h3>
-              <p className="text-[11px] text-slate-400 font-normal">
+              <h3 className="text-sm font-extrabold text-neutral-900 dark:text-white leading-tight">
+                {truck.name}
+              </h3>
+              <p className="text-[10px] text-neutral-500 dark:text-neutral-400 font-normal">
                 {truck.registrationNumber} · {truck.company}
               </p>
             </div>
           </div>
 
-          <div className="px-3 py-1 rounded-full bg-brand-cyan/15 border border-brand-cyan/30 text-brand-cyan text-xs font-black">
-            {matchScore}% AI Match
+          <div className="px-2.5 py-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-black">
+            {matchScore}% Match
           </div>
         </div>
       }
     >
-      <div className="space-y-5">
+      <div className="space-y-4">
 
         {/* Quick Specs Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div className="p-2.5 rounded-xl bg-dark-900/80 border border-white/5">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Available Space</span>
-            <span className="text-sm font-extrabold text-brand-cyan">{truck.availableCapacityTons} Tons</span>
-            <span className="text-[10px] text-slate-500 block">of {truck.totalCapacityTons} T total</span>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-[9px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">Available</span>
+            <span className="text-sm font-black text-neutral-900 dark:text-white">{truck.availableCapacityTons} Tons</span>
+            <span className="text-[9px] text-neutral-400 block">of {truck.totalCapacityTons} T total</span>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-dark-900/80 border border-white/5">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Distance & ETA</span>
-            <span className="text-sm font-extrabold text-white">{etaMinutes} mins away</span>
-            <span className="text-[10px] text-slate-400 block">{(distanceKm * 0.04).toFixed(1)} km to pickup</span>
+          <div className="p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-[9px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">ETA</span>
+            <span className="text-sm font-black text-neutral-900 dark:text-white">{etaMinutes} mins</span>
+            <span className="text-[9px] text-neutral-400 block">{(distanceKm * 0.04).toFixed(1)} km to pickup</span>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-dark-900/80 border border-white/5">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Trip Fare</span>
-            <span className="text-sm font-extrabold text-emerald-400">₹{estimatedPrice.toLocaleString('en-IN')}</span>
-            <span className="text-[10px] text-emerald-400/80 block">Save ₹{savingsAmount}</span>
+          <div className="p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-[9px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">Trip Fare</span>
+            <span className="text-sm font-black text-neutral-900 dark:text-white">₹{estimatedPrice.toLocaleString('en-IN')}</span>
+            <span className="text-[9px] text-neutral-400 block">Save ₹{savingsAmount}</span>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-dark-900/80 border border-white/5">
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">Truck Type</span>
-            <span className="text-xs font-bold text-white truncate block">{truck.truckType}</span>
-            <span className="text-[10px] text-slate-400 block">{truck.model}</span>
+          <div className="p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+            <span className="text-[9px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">Vehicle</span>
+            <span className="text-xs font-bold text-neutral-900 dark:text-white truncate block">{truck.truckType}</span>
+            <span className="text-[9px] text-neutral-400 block truncate">{truck.model}</span>
           </div>
         </div>
 
-        {/* Return Trip Opportunity Highlight */}
+        {/* Return Trip Savings Note */}
         {isReturnTrip && (
-          <ReturnTripBadge
-            destinationCity={searchQuery.toLocation?.name || 'Bengaluru'}
-            emptyKmSaved={emptyKmSaved}
-            savingsAmount={savingsAmount}
-            co2ReductionKg={co2ReductionKg}
-          />
+          <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-between text-xs">
+            <div>
+              <span className="font-bold text-neutral-900 dark:text-white block">Smart Return Trip</span>
+              <span className="text-[11px] text-neutral-500 dark:text-neutral-400">
+                Heading toward {searchQuery.toLocation?.name || 'Bengaluru'} · {emptyKmSaved} km empty travel avoided
+              </span>
+            </div>
+            <span className="text-xs font-black text-neutral-900 dark:text-white font-mono">
+              -₹{savingsAmount} saved
+            </span>
+          </div>
         )}
 
-        {/* Collaboration Score & AI Reason */}
-        <div className="p-4 rounded-xl bg-dark-900/80 border border-white/10 space-y-3">
+        {/* AI Explanation Callout */}
+        <div className="p-3.5 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 space-y-2">
           <div className="flex items-center justify-between">
-            <CollaborationBadge score={collaborationScore} size="md" />
-            
+            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+              AI Recommendation
+            </span>
             <button
               onClick={() => {
                 setIsTruckDetailOpen(false);
                 setIsWhyThisTruckOpen(true);
               }}
-              className="text-xs font-bold text-brand-cyan hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-neutral-900 dark:text-white underline underline-offset-2 hover:opacity-80"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Why recommended?</span>
+              Why this truck?
             </button>
           </div>
-
-          <p className="text-xs text-slate-300 leading-relaxed italic border-t border-white/5 pt-2.5">
+          <p className="text-xs text-neutral-700 dark:text-neutral-300 italic leading-relaxed">
             "{explanation.summaryReason}"
           </p>
         </div>
 
         {/* Driver Card */}
-        <div className="p-3.5 rounded-xl bg-dark-900/60 border border-white/5 flex items-center justify-between">
+        <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img 
-              src={truck.driver.avatar || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'} 
-              alt={truck.driver.name}
-              className="w-12 h-12 rounded-xl object-cover border border-white/10 shadow" 
-            />
+            <div className="w-10 h-10 rounded-xl bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center font-bold text-sm text-neutral-900 dark:text-white">
+              {truck.driver.name.charAt(0)}
+            </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="text-sm font-bold text-white">{truck.driver.name}</span>
-                <span className="flex items-center gap-0.5 text-xs font-bold text-amber-400">
-                  <Star className="w-3 h-3 fill-amber-400" />
-                  {truck.driver.rating}
+                <span className="text-xs font-bold text-neutral-900 dark:text-white">{truck.driver.name}</span>
+                <span className="flex items-center text-[11px] text-amber-500 font-bold">
+                  ★ {truck.driver.rating}
                 </span>
               </div>
-              <div className="text-[11px] text-slate-400">
-                {truck.driver.tripsCompleted} collaborative trips · {truck.driver.experienceYears} yrs experience
-              </div>
-              <div className="text-[11px] text-brand-cyan font-mono mt-0.5">
-                {truck.driver.phone}
+              <div className="text-[10px] text-neutral-500 dark:text-neutral-400">
+                {truck.driver.tripsCompleted} completed trips · {truck.driver.experienceYears} yrs experience
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col items-end gap-1">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/30 text-emerald-300 text-[10px] font-bold">
-              <ShieldCheck className="w-3 h-3" />
-              Verified Pro
-            </span>
-          </div>
-        </div>
-
-        {/* Route Snapshot */}
-        <div className="p-3 rounded-xl bg-dark-950/70 border border-white/5 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <Navigation className="w-4 h-4 text-brand-cyan" />
-            <span className="text-slate-300">
-              <strong className="text-white">{searchQuery.fromLocation?.name || 'Chennai'}</strong> → <strong className="text-white">{searchQuery.toLocation?.name || 'Bengaluru'}</strong>
-            </span>
-          </div>
-          <span className="text-slate-400 text-[11px]">~{distanceKm} km transit</span>
+          <span className="px-2 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-[10px] font-bold">
+            Verified Pro
+          </span>
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between pt-3 border-t border-white/10">
+        <div className="flex items-center justify-between pt-2 border-t border-neutral-200 dark:border-neutral-800">
           <button
             onClick={() => setIsTruckDetailOpen(false)}
-            className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white"
           >
             Go Back
           </button>
 
           <button
             onClick={() => handleBookTruck(selectedMatch)}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-cyan to-blue-600 text-dark-950 font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-cyan-500/25 hover:opacity-95 transition-all"
+            className="px-6 py-2.5 rounded-xl bg-black text-white dark:bg-white dark:text-black font-extrabold text-xs sm:text-sm shadow-md hover:opacity-90 transition-all flex items-center gap-2"
           >
             <span>Book This Truck</span>
             <ArrowRight className="w-4 h-4" />

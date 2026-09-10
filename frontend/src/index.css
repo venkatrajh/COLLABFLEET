@@ -4,167 +4,102 @@
 
 @layer base {
   body {
-    @apply bg-dark-950 text-slate-100 antialiased selection:bg-brand-cyan/20 selection:text-brand-cyan overflow-x-hidden;
+    @apply bg-neutral-50 dark:bg-black text-neutral-900 dark:text-neutral-100 antialiased overflow-x-hidden transition-colors duration-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Custom sleek scrollbar */
+  /* Sleek minimalist scrollbar */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
   ::-webkit-scrollbar-track {
-    background: #0B0F19;
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1E2B47;
-    border-radius: 9999px;
+    @apply bg-neutral-300 dark:bg-neutral-800 rounded-full;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #0EA5E9;
+    @apply bg-neutral-400 dark:bg-neutral-700;
   }
 }
 
-/* Premium Glassmorphism Utilities */
+/* Minimalist Monochrome Glassmorphism */
 .glass-panel {
-  background: rgba(11, 15, 25, 0.82);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.55);
+  @apply bg-white/95 dark:bg-black/90 backdrop-blur-md border border-neutral-200/90 dark:border-neutral-800 shadow-xl shadow-black/5 dark:shadow-black/60 text-neutral-900 dark:text-white transition-colors duration-200;
 }
 
 .glass-card {
-  background: rgba(17, 24, 39, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  @apply bg-white/95 dark:bg-neutral-950/90 border border-neutral-200/80 dark:border-neutral-800 shadow-sm hover:shadow-md text-neutral-900 dark:text-white transition-all duration-200;
 }
 
-.glass-card-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
 .glass-card-hover:hover {
-  background: rgba(22, 31, 51, 0.9);
-  border-color: rgba(0, 242, 254, 0.3);
-  box-shadow: 0 12px 35px -5px rgba(0, 242, 254, 0.15);
-  transform: translateY(-2px);
+  @apply border-black dark:border-white shadow-lg -translate-y-0.5;
 }
 
 .glass-input {
-  background: rgba(11, 15, 25, 0.65);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #F1F5F9;
-  transition: all 0.2s ease;
-}
-.glass-input:focus {
-  border-color: #00F2FE;
-  box-shadow: 0 0 0 2px rgba(0, 242, 254, 0.2);
-  outline: none;
+  @apply bg-neutral-100/90 dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white focus:border-black dark:focus:border-white focus:outline-none transition-all;
 }
 
 .glass-modal {
-  background: rgba(11, 15, 25, 0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 242, 254, 0.15);
+  @apply bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 shadow-2xl text-neutral-900 dark:text-white;
 }
 
-/* Gradient accents */
-.text-gradient-cyan {
-  background: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Leaflet Map Theme Styling */
+.dark .dark-map .leaflet-tile-pane {
+  filter: brightness(0.65) invert(1) contrast(1.15) hue-rotate(190deg) saturate(0.2);
 }
 
-.text-gradient-emerald {
-  background: linear-gradient(135deg, #34D399 0%, #059669 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.bg-gradient-brand {
-  background: linear-gradient(135deg, #00F2FE 0%, #0284C7 100%);
-}
-
-.bg-gradient-glow {
-  background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.15) 0%, rgba(11, 15, 25, 0) 70%);
-}
-
-/* Leaflet Map Dark Theme Styling */
-.dark-map .leaflet-tile-pane {
-  filter: brightness(0.65) invert(1) contrast(1.2) hue-rotate(200deg) saturate(0.35);
+.light-map .leaflet-tile-pane {
+  filter: contrast(1.02) saturate(0.95);
 }
 
 .leaflet-container {
-  background: #07090E !important;
+  background: #f5f5f5 !important;
   font-family: inherit !important;
   outline: none !important;
 }
 
-.leaflet-control-zoom {
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: rgba(11, 15, 25, 0.85) !important;
-  backdrop-filter: blur(12px) !important;
-  border-radius: 12px !important;
-  overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5) !important;
+.dark .leaflet-container {
+  background: #000000 !important;
 }
 
-.leaflet-control-zoom a {
-  background: transparent !important;
-  color: #00F2FE !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-.leaflet-control-zoom a:hover {
-  background: rgba(0, 242, 254, 0.15) !important;
-  color: #fff !important;
+/* Hide default leaflet zoom since we have custom floating Uber-style controls */
+.leaflet-control-zoom {
+  display: none !important;
 }
 
 .leaflet-control-attribution {
-  background: rgba(7, 9, 14, 0.8) !important;
-  color: #64748B !important;
-  font-size: 10px !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  color: #737373 !important;
+  font-size: 9px !important;
   border-radius: 6px !important;
-  margin: 8px !important;
+  margin: 6px !important;
+  backdrop-filter: blur(4px) !important;
 }
+
+.dark .leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.75) !important;
+  color: #a3a3a3 !important;
+}
+
 .leaflet-control-attribution a {
-  color: #0EA5E9 !important;
+  color: inherit !important;
+  text-decoration: underline !important;
 }
 
-/* Custom Marker Pulsing */
-@keyframes marker-pulse {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.7);
-  }
-  70% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 14px rgba(0, 242, 254, 0);
-  }
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(0, 242, 254, 0);
-  }
-}
-
-.pulsing-marker {
-  animation: marker-pulse 2.2s infinite;
-}
-
-/* Live moving truck indicator */
-@keyframes truck-glow {
+/* Minimal Pulse Animation */
+@keyframes subtle-pulse {
   0%, 100% {
-    filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.9));
+    transform: scale(1);
+    opacity: 1;
   }
   50% {
-    filter: drop-shadow(0 0 18px rgba(0, 242, 254, 1));
+    transform: scale(1.08);
+    opacity: 0.85;
   }
 }
 
-.live-truck-glow {
-  animation: truck-glow 1.8s infinite ease-in-out;
+.animate-subtle-pulse {
+  animation: subtle-pulse 2s infinite ease-in-out;
 }

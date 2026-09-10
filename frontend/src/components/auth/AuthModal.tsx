@@ -8,10 +8,7 @@ import {
   Package, 
   Mail, 
   Lock, 
-  ArrowRight, 
-  Sparkles, 
-  CheckCircle2,
-  ShieldCheck
+  ArrowRight 
 } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
@@ -32,7 +29,7 @@ export const AuthModal: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailOrPhone) {
-      showToast('Please enter your email or phone number', 'error');
+      showToast('Please enter email or phone number', 'error');
       return;
     }
 
@@ -41,10 +38,10 @@ export const AuthModal: React.FC = () => {
       await AuthService.login(emailOrPhone, selectedRole);
       setRole(selectedRole);
       refreshUserProfile();
-      showToast(`Welcome to CollabFleet as ${selectedRole === 'shipper' ? 'Shipper' : 'Fleet Operator'}!`, 'success');
+      showToast(`Signed in as ${selectedRole === 'shipper' ? 'Shipper' : 'Fleet Owner'}`, 'success');
       setIsAuthModalOpen(false);
     } catch (err) {
-      showToast('Login failed. Please verify your credentials.', 'error');
+      showToast('Login failed. Please verify credentials.', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -54,115 +51,95 @@ export const AuthModal: React.FC = () => {
     <Modal
       isOpen={isAuthModalOpen}
       onClose={() => setIsAuthModalOpen(false)}
-      maxWidth="max-w-md"
+      maxWidth="max-w-sm"
     >
-      <div className="space-y-5 py-1">
+      <div className="space-y-4 py-1 text-xs">
         
         {/* Header */}
         <div className="text-center space-y-1">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-cyan to-blue-600 flex items-center justify-center text-dark-950 font-black mx-auto shadow-glass-glow">
-            <TruckIcon className="w-6 h-6 stroke-[2.5]" />
+          <div className="w-10 h-10 rounded-2xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-black mx-auto shadow">
+            <TruckIcon className="w-5 h-5" />
           </div>
-          <h2 className="text-xl font-black text-white tracking-tight pt-2">
+          <h2 className="text-base font-extrabold text-neutral-900 dark:text-white tracking-tight pt-1">
             How will you use CollabFleet?
           </h2>
-          <p className="text-xs text-slate-400">
-            Select your account type to access tailored freight intelligence
+          <p className="text-[11px] text-neutral-500">
+            Select your account type
           </p>
         </div>
 
-        {/* Two Large Role Cards */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* Shipper */}
+        {/* Role Cards */}
+        <div className="grid grid-cols-2 gap-2">
           <div
             onClick={() => setSelectedRole('shipper')}
-            className={`p-4 rounded-2xl border cursor-pointer transition-all flex flex-col items-center text-center gap-2 ${
+            className={`p-3 rounded-2xl border cursor-pointer transition-all flex flex-col items-center text-center gap-1.5 ${
               selectedRole === 'shipper'
-                ? 'bg-brand-cyan/15 border-brand-cyan shadow-glass-glow ring-1 ring-brand-cyan/50'
-                : 'bg-dark-900/80 border-white/10 hover:border-white/20'
+                ? 'bg-neutral-100 dark:bg-neutral-900 border-black dark:border-white shadow-sm ring-1 ring-black dark:ring-white'
+                : 'bg-neutral-50 dark:bg-neutral-900/60 border-neutral-200 dark:border-neutral-800'
             }`}
           >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              selectedRole === 'shipper' ? 'bg-brand-cyan text-dark-950 font-bold' : 'bg-dark-800 text-slate-300'
-            }`}>
-              <Package className="w-5 h-5" />
-            </div>
+            <Package className="w-5 h-5 text-neutral-800 dark:text-neutral-200" />
             <div>
-              <div className="text-xs font-black text-white">I need a truck</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Shipper & Business</div>
+              <div className="text-xs font-extrabold text-neutral-900 dark:text-white">I need a truck</div>
+              <div className="text-[10px] text-neutral-500">Shipper</div>
             </div>
           </div>
 
-          {/* Fleet Operator */}
           <div
             onClick={() => setSelectedRole('fleet_operator')}
-            className={`p-4 rounded-2xl border cursor-pointer transition-all flex flex-col items-center text-center gap-2 ${
+            className={`p-3 rounded-2xl border cursor-pointer transition-all flex flex-col items-center text-center gap-1.5 ${
               selectedRole === 'fleet_operator'
-                ? 'bg-brand-cyan/15 border-brand-cyan shadow-glass-glow ring-1 ring-brand-cyan/50'
-                : 'bg-dark-900/80 border-white/10 hover:border-white/20'
+                ? 'bg-neutral-100 dark:bg-neutral-900 border-black dark:border-white shadow-sm ring-1 ring-black dark:ring-white'
+                : 'bg-neutral-50 dark:bg-neutral-900/60 border-neutral-200 dark:border-neutral-800'
             }`}
           >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-              selectedRole === 'fleet_operator' ? 'bg-brand-cyan text-dark-950 font-bold' : 'bg-dark-800 text-slate-300'
-            }`}>
-              <TruckIcon className="w-5 h-5" />
-            </div>
+            <TruckIcon className="w-5 h-5 text-neutral-800 dark:text-neutral-200" />
             <div>
-              <div className="text-xs font-black text-white">I have trucks</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Fleet Operator & Owner</div>
+              <div className="text-xs font-extrabold text-neutral-900 dark:text-white">I have trucks</div>
+              <div className="text-[10px] text-neutral-500">Fleet Owner</div>
             </div>
           </div>
         </div>
 
-        {/* Credentials Form */}
-        <form onSubmit={handleSubmit} className="space-y-3.5">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-              Email or Mobile Number
+            <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
+              Email or Phone
             </label>
-            <div className="relative">
-              <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                value={emailOrPhone}
-                onChange={(e) => setEmailOrPhone(e.target.value)}
-                placeholder="name@company.com or +91 98401..."
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl glass-input text-xs font-medium"
-                required
-              />
-            </div>
+            <input
+              type="text"
+              value={emailOrPhone}
+              onChange={(e) => setEmailOrPhone(e.target.value)}
+              placeholder="name@company.com or +91..."
+              className="w-full px-3 py-2 rounded-xl glass-input text-xs font-semibold"
+              required
+            />
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+            <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
               Password
             </label>
-            <div className="relative">
-              <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl glass-input text-xs font-medium"
-                required
-              />
-            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full px-3 py-2 rounded-xl glass-input text-xs font-semibold"
+              required
+            />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-brand-cyan via-sky-500 to-blue-600 text-dark-950 font-black text-sm tracking-wide shadow-xl shadow-cyan-500/25 hover:opacity-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full py-2.5 px-4 rounded-xl bg-black text-white dark:bg-white dark:text-black font-extrabold text-xs shadow hover:opacity-90 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
           >
-            <span>{isSubmitting ? 'Authenticating...' : 'Continue'}</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>{isSubmitting ? 'Signing in...' : 'Continue'}</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </form>
-
-        <div className="text-center pt-1 text-xs text-slate-400">
-          Ready for FastAPI backend integration via <code className="text-brand-cyan text-[10px] font-mono">/api/v1/auth</code>
-        </div>
 
       </div>
     </Modal>

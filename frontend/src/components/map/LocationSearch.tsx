@@ -1,23 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { LocationHub } from '../../types';
 import { INDIAN_LOCATION_HUBS } from '../../services/mockData';
-import { MapPin, Plane, Anchor, Building2, Search, X } from 'lucide-react';
+import { MapPin, Plane, Anchor, Building2, X } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
 
 interface LocationSearchProps {
   label: string;
   placeholder?: string;
   selectedLocation: LocationHub | null;
   onSelectLocation: (loc: LocationHub) => void;
-  iconColor?: string;
 }
 
 export const LocationSearch: React.FC<LocationSearchProps> = ({
   label,
-  placeholder = 'Search city, port or hub...',
+  placeholder = 'Search location...',
   selectedLocation,
   onSelectLocation,
-  iconColor = 'text-brand-cyan'
 }) => {
+  const { recenterMap } = useApp();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(selectedLocation ? selectedLocation.name : '');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,24 +52,24 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
   const getHubIcon = (type: LocationHub['hubType']) => {
     switch (type) {
       case 'port':
-        return <Anchor className="w-3.5 h-3.5 text-blue-400" />;
+        return <Anchor className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />;
       case 'airport':
-        return <Plane className="w-3.5 h-3.5 text-amber-400" />;
+        return <Plane className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />;
       case 'hub':
-        return <Building2 className="w-3.5 h-3.5 text-emerald-400" />;
+        return <Building2 className="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400" />;
       default:
-        return <MapPin className="w-3.5 h-3.5 text-brand-cyan" />;
+        return <MapPin className="w-3.5 h-3.5 text-neutral-700 dark:text-neutral-300" />;
     }
   };
 
   return (
     <div className="relative w-full" ref={containerRef}>
-      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+      <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
         {label}
       </label>
 
       <div className="relative">
-        <div className={`absolute left-3 top-1/2 -translate-y-1/2 ${iconColor}`}>
+        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-neutral-400">
           <MapPin className="w-4 h-4" />
         </div>
 
@@ -82,7 +82,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
           }}
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
-          className="w-full pl-9 pr-8 py-2.5 rounded-xl glass-input text-xs sm:text-sm font-medium focus:bg-dark-900/90"
+          className="w-full pl-9 pr-8 py-2 rounded-xl glass-input text-xs font-semibold focus:ring-1 focus:ring-black dark:focus:ring-white"
         />
 
         {searchQuery && (
@@ -91,7 +91,8 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
               setSearchQuery('');
               setIsOpen(true);
             }}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-white"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-neutral-400 hover:text-black dark:hover:text-white"
+            aria-label="Clear location"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -100,8 +101,8 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
 
       {/* Autocomplete Suggestions Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 z-50 glass-modal rounded-xl border border-white/10 shadow-2xl max-h-60 overflow-y-auto">
-          <div className="p-1.5 space-y-0.5">
+        <div className="absolute top-full left-0 right-0 mt-1 z-50 glass-modal rounded-xl border shadow-2xl max-h-56 overflow-y-auto">
+          <div className="p-1 space-y-0.5">
             {filteredHubs.length > 0 ? (
               filteredHubs.map(hub => (
                 <div
@@ -110,31 +111,32 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
                     onSelectLocation(hub);
                     setSearchQuery(hub.name);
                     setIsOpen(false);
+                    recenterMap(hub.coordinates, 10);
                   }}
-                  className="flex items-center justify-between p-2.5 rounded-lg hover:bg-brand-cyan/10 hover:border-brand-cyan/20 border border-transparent cursor-pointer transition-all group"
+                  className="flex items-center justify-between p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900 cursor-pointer transition-colors group"
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-dark-900 flex items-center justify-center shrink-0 border border-white/5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-md bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center shrink-0">
                       {getHubIcon(hub.hubType)}
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-white group-hover:text-brand-cyan transition-colors">
+                      <div className="text-xs font-bold text-neutral-900 dark:text-white group-hover:underline">
                         {hub.name}
                       </div>
-                      <div className="text-[10px] text-slate-400">
-                        {hub.city}, {hub.state} {hub.landmark ? `· ${hub.landmark}` : ''}
+                      <div className="text-[10px] text-neutral-500 dark:text-neutral-400">
+                        {hub.city}, {hub.state}
                       </div>
                     </div>
                   </div>
 
-                  <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-dark-900/80 text-slate-400 border border-white/5">
+                  <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800">
                     {hub.hubType}
                   </span>
                 </div>
               ))
             ) : (
-              <div className="p-3 text-center text-xs text-slate-400">
-                No transport hubs matching "{searchQuery}"
+              <div className="p-3 text-center text-xs text-neutral-500">
+                No location found
               </div>
             )}
           </div>
