@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
-  const { setActiveView, setRole, theme, toggleTheme } = useApp();
+  const { setActiveView, setRole } = useApp();
 
   // 1. Rotating Value Proposition Headline
   const HEADLINES = [
@@ -45,56 +45,48 @@ export const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F7F5] dark:bg-black text-neutral-900 dark:text-neutral-100 selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
+    <div className="min-h-screen bg-black text-neutral-100 selection:bg-white selection:text-black">
       
       {/* 1. Dedicated Minimalist Landing Navbar */}
-      <header className="sticky top-0 z-50 bg-[#F7F7F5]/90 dark:bg-black/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800">
+      <header className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
           
           {/* Logo */}
           <div className="flex items-center gap-2.5 cursor-pointer select-none" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="w-8 h-8 rounded-xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-black shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center font-black shadow-sm">
               <Truck className="w-4 h-4" />
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="font-extrabold text-base tracking-tight text-neutral-900 dark:text-white">
+              <span className="font-extrabold text-base tracking-tight text-white">
                 COLLABFLEET
               </span>
-              <span className="px-1.5 py-0.5 text-[9px] font-black tracking-widest uppercase bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 rounded">
+              <span className="px-1.5 py-0.5 text-[9px] font-black tracking-widest uppercase bg-neutral-800 text-neutral-200 rounded">
                 AI
               </span>
             </div>
           </div>
 
           {/* Nav Links */}
-          <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-neutral-600 dark:text-neutral-400">
-            <a href="#how-it-works" className="hover:text-black dark:hover:text-white transition-colors">
+          <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-neutral-400">
+            <a href="#how-it-works" className="hover:text-white transition-colors">
               How It Works
             </a>
-            <a href="#explainable-ai" className="hover:text-black dark:hover:text-white transition-colors">
+            <a href="#explainable-ai" className="hover:text-white transition-colors">
               AI Intelligence
             </a>
-            <a href="#empty-miles" className="hover:text-black dark:hover:text-white transition-colors">
+            <a href="#empty-miles" className="hover:text-white transition-colors">
               Collaboration
             </a>
-            <a href="#impact" className="hover:text-black dark:hover:text-white transition-colors">
+            <a href="#impact" className="hover:text-white transition-colors">
               Impact
             </a>
           </nav>
 
-          {/* Action & Theme Switch */}
-          <div className="flex items-center gap-2.5">
-            <button
-              onClick={toggleTheme}
-              className="w-8 h-8 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white flex items-center justify-center transition-all hover:scale-105 text-xs font-bold shadow-sm"
-              title="Toggle theme"
-            >
-              {theme === 'dark' ? '☀' : '◐'}
-            </button>
-
+          {/* Actions */}
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setActiveView('login')}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white transition-colors"
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-neutral-300 hover:text-white transition-colors"
             >
               Sign In
             </button>

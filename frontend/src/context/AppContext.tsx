@@ -88,32 +88,6 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Theme state with localStorage persistence (Default: dark)
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    try {
-      const saved = localStorage.getItem('collabfleet_theme');
-      if (saved === 'light' || saved === 'dark') return saved;
-      return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'dark';
-    } catch {
-      return 'dark';
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('collabfleet_theme', theme);
-    } catch {}
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
-  };
-
   // Authentication state (Mock-ready and FastAPI-ready)
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => AuthService.isAuthenticated());
   const [currentRole, setCurrentRoleState] = useState<UserRole>(() => {
@@ -128,6 +102,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeView, setActiveView] = useState<AppView>(() => {
     return AuthService.isAuthenticated() ? 'home' : 'landing';
   });
+
+  // Fixed Two-Phase Theme System:
+  // 1. Landing & Login: DARK MODE ONLY (#000000, #080808, #111111, #FFFFFF, #B5B5B5)
+  // 2. Logged-in Application: WARM LIGHT MODE ONLY (#F4F3EF, #FFFFFF, #111111, #DEDDD8)
+  const isDarkPhase = !isAuthenticated || activeView === 'landing' || activeView === 'login';
+  const theme = isDarkPhase ? 'dark' : 'light';
+
+  useEffect(() => {
+    if (isDarkPhase) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkPhase]);
+
+  const toggleTheme = () => {
+    // Theme is fixed per phase as designed (no manual toggle)
+  };
 
   const [isSearchPanelCollapsed, setIsSearchPanelCollapsed] = useState(false);
   const [isMapExpanded, setIsMapExpanded] = useState(false);

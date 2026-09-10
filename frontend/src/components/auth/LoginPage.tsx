@@ -9,14 +9,12 @@ import {
   CheckCircle2, 
   Shield, 
   Zap, 
-  Sun, 
-  Moon,
   Mail,
   Lock
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
-  const { currentRole, setRole, loginUser, setActiveView, theme, toggleTheme, showToast } = useApp();
+  const { currentRole, setRole, loginUser, setActiveView, showToast } = useApp();
 
   const [selectedRole, setSelectedRole] = useState<UserRole>(currentRole || 'shipper');
   const [emailOrPhone, setEmailOrPhone] = useState('demo.shipper@collabfleet.in');
@@ -51,27 +49,17 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F7F5] dark:bg-black text-neutral-900 dark:text-neutral-100 flex flex-col justify-between selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
+    <div className="min-h-screen bg-black text-neutral-100 flex flex-col justify-between selection:bg-white selection:text-black">
       
       {/* Top Bar */}
-      <header className="px-6 py-4 flex items-center justify-between border-b border-neutral-200/80 dark:border-neutral-900 max-w-7xl mx-auto w-full">
+      <header className="px-6 py-4 flex items-center justify-between border-b border-neutral-900 max-w-7xl mx-auto w-full">
         <button
           onClick={() => setActiveView('landing')}
-          className="flex items-center gap-2 text-xs font-bold text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-xs font-bold text-neutral-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Overview</span>
         </button>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggleTheme}
-            className="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white flex items-center justify-center transition-colors text-xs font-bold"
-            title="Toggle theme"
-          >
-            {theme === 'dark' ? '☀' : '◐'}
-          </button>
-        </div>
       </header>
 
       {/* Main 2-Column Auth Layout (Left-Aligned Desktop) */}

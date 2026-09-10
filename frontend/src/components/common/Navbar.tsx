@@ -9,17 +9,13 @@ import {
   Boxes, 
   Sparkles, 
   User, 
-  Sun, 
-  Moon,
-  Maximize2,
-  Minimize2,
-  LogOut
+  Maximize2, 
+  Minimize2, 
+  LogOut 
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { 
-    theme,
-    toggleTheme,
     currentRole, 
     setRole, 
     activeView, 
@@ -181,20 +177,6 @@ export const Navbar: React.FC = () => {
               Fleet
             </button>
           </div>
-
-          {/* Light / Dark Mode Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white flex items-center justify-center transition-all hover:scale-105"
-            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? (
-              <Sun className="w-4 h-4 text-amber-300" />
-            ) : (
-              <Moon className="w-4 h-4 text-neutral-800" />
-            )}
-          </button>
 
           {/* Profile Trigger */}
           <button

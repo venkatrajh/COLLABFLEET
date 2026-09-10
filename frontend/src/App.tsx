@@ -21,6 +21,7 @@ import { ProfileView } from './components/auth/ProfileView';
 import { AuthModal } from './components/auth/AuthModal';
 import { LandingPage } from './components/landing/LandingPage';
 import { LoginPage } from './components/auth/LoginPage';
+import { CustomCursor } from './components/common/CustomCursor';
 import { ArrowLeft, ChevronDown, ChevronUp, Eye, EyeOff } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -45,20 +46,22 @@ export const App: React.FC = () => {
     }
   }, [isAuthenticated, activeView, setActiveView]);
 
-  // 1. Unauthenticated: Full Landing Page Experience
+  // 1. Unauthenticated: Full Landing Page Experience (Permanently Dark Mode)
   if (!isAuthenticated && activeView === 'landing') {
     return (
-      <div className="relative w-screen min-h-screen bg-neutral-50 dark:bg-black font-sans">
+      <div className="relative w-screen min-h-screen bg-black text-white font-sans">
+        <CustomCursor />
         <LandingPage />
         <Toast />
       </div>
     );
   }
 
-  // 2. Authentication: Role-Selection + Login Page
+  // 2. Authentication: Role-Selection + Login Page (Permanently Dark Mode)
   if (!isAuthenticated && activeView === 'login') {
     return (
-      <div className="relative w-screen min-h-screen bg-neutral-50 dark:bg-black font-sans">
+      <div className="relative w-screen min-h-screen bg-black text-white font-sans">
+        <CustomCursor />
         <LoginPage />
         <Toast />
       </div>
@@ -66,7 +69,8 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="relative w-screen min-h-screen bg-[#F7F7F5] dark:bg-black text-neutral-900 dark:text-neutral-100 overflow-x-hidden font-sans select-none">
+    <div className="relative w-screen min-h-screen bg-[#F4F3EF] text-[#111111] overflow-x-hidden font-sans select-none">
+      <CustomCursor />
       
       {/* 1. Core Real Leaflet Interactive Map — Full Screen Surface */}
       <MapView />

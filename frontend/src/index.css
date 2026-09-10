@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-[#F7F7F5] dark:bg-black text-neutral-900 dark:text-neutral-100 antialiased overflow-x-hidden transition-colors duration-200;
+    @apply bg-[#F4F3EF] dark:bg-black text-[#111111] dark:text-neutral-100 antialiased overflow-x-hidden transition-colors duration-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -24,25 +24,25 @@
   }
 }
 
-/* Minimalist Monochrome Glassmorphism */
+/* Minimalist Monochrome Glassmorphism (Warm Light App / Pure Dark Landing) */
 .glass-panel {
-  @apply bg-white/95 dark:bg-black/90 backdrop-blur-md border border-neutral-200/80 dark:border-neutral-800/90 shadow-sm dark:shadow-black/60 text-neutral-900 dark:text-white transition-colors duration-200;
+  @apply bg-white/95 dark:bg-black/90 backdrop-blur-md border border-[#DEDDD8] dark:border-neutral-800/90 shadow-sm dark:shadow-black/60 text-[#111111] dark:text-white transition-colors duration-200;
 }
 
 .glass-card {
-  @apply bg-white dark:bg-neutral-950/90 border border-neutral-200/70 dark:border-neutral-800/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:hover:border-neutral-600 text-neutral-900 dark:text-white transition-all duration-200;
+  @apply bg-white dark:bg-neutral-950/90 border border-[#DEDDD8] dark:border-neutral-800/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:hover:border-neutral-600 text-[#111111] dark:text-white transition-all duration-200;
 }
 
 .glass-card-hover:hover {
-  @apply border-black dark:border-white shadow-lg -translate-y-0.5;
+  @apply border-[#111111] dark:border-white shadow-lg -translate-y-0.5;
 }
 
 .glass-input {
-  @apply bg-[#EFEFED] dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white focus:border-black dark:focus:border-white focus:outline-none transition-all;
+  @apply bg-[#F0EFEA] dark:bg-neutral-900/90 border border-[#DEDDD8] dark:border-neutral-800 text-[#111111] dark:text-white focus:border-[#111111] dark:focus:border-white focus:bg-white focus:outline-none transition-all;
 }
 
 .glass-modal {
-  @apply bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 shadow-2xl text-neutral-900 dark:text-white;
+  @apply bg-white dark:bg-neutral-950 border border-[#DEDDD8] dark:border-neutral-800 shadow-2xl text-[#111111] dark:text-white;
 }
 
 /* Leaflet Map Theme Styling — Balanced & Stable */
@@ -57,7 +57,7 @@
 }
 
 .leaflet-container {
-  background: #F7F7F5 !important;
+  background: #F4F3EF !important;
   font-family: inherit !important;
   outline: none !important;
 }
