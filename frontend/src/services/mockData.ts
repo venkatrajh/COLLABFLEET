@@ -594,5 +594,22 @@ export const INITIAL_USER_PROFILE: UserProfile = {
     co2ReductionKg: 420,
     completedTrips: 18,
     activeShipments: 1
+  },
+  settings: {
+    notifications: {
+      shipmentUpdates: true,
+      newTruckMatches: true,
+      bookingUpdates: true,
+      fleetOpportunities: true
+    },
+    privacy: {
+      profileVisibility: true,
+      showCompanyInfo: true,
+      shareTracking: false
+    },
+    location: {
+      locationServicesEnabled: true,
+      permissionStatus: 'prompt'
+    }
   }
 };

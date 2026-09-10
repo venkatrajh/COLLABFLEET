@@ -7,12 +7,14 @@ import {
   Shipment, 
   Truck, 
   UserProfile, 
-  UserRole 
+  UserRole,
+  UserSettings
 } from '../types';
-import { INDIAN_LOCATION_HUBS, INITIAL_SHIPMENTS } from '../services/mockData';
+import { INDIAN_LOCATION_HUBS, INITIAL_SHIPMENTS, INITIAL_USER_PROFILE } from '../services/mockData';
 import { MatchingService } from '../services/matchingService';
 import { ShipmentService } from '../services/shipmentService';
 import { AuthService } from '../services/authService';
+import { LocationService } from '../services/locationService';
 
 interface ToastData {
   id: number;
@@ -76,6 +78,14 @@ interface AppContextType {
   setActiveTruckForDetail: (truck: Truck | null) => void;
   userProfile: UserProfile;
   refreshUserProfile: () => void;
+  updateUserProfile: (data: Partial<UserProfile>) => void;
+  updateUserSettings: (data: Partial<UserSettings>) => void;
+
+  // Real User Location Services
+  userLocation: [number, number] | null;
+  locationPermissionState: 'granted' | 'denied' | 'prompt' | 'unsupported';
+  requestUserLocation: () => Promise<[number, number] | null>;
+  recenterOnUserLocation: () => void;
 
   // Actions
   handleBookTruck: (match: MatchResult) => void;
@@ -179,6 +189,80 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const refreshUserProfile = () => {
     setUserProfile(AuthService.getCurrentUser());
+  };
+
+  // User Location State (Actual Browser Geolocation)
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(() => {
+    try {
+      const saved = localStorage.getItem('collabfleet_user_coords');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return null;
+  });
+  const [locationPermissionState, setLocationPermissionState] = useState<'granted' | 'denied' | 'prompt' | 'unsupported'>('prompt');
+
+  // Initial Location Check on App Mount:
+  // If permission is already granted, get coordinates and center map on user first!
+  useEffect(() => {
+    LocationService.checkPermissionStatus().then(status => {
+      setLocationPermissionState(status);
+      if (status === 'granted') {
+        LocationService.getCurrentLocation().then(coords => {
+          if (coords) {
+            const loc: [number, number] = [coords.latitude, coords.longitude];
+            setUserLocation(loc);
+            setMapCenterTrigger({ coords: loc, zoom: 12, id: Date.now() });
+          }
+        });
+      }
+    });
+  }, []);
+
+  const requestUserLocation = async (): Promise<[number, number] | null> => {
+    try {
+      const coords = await LocationService.requestLocationPermission();
+      const loc: [number, number] = [coords.latitude, coords.longitude];
+      setUserLocation(loc);
+      setLocationPermissionState('granted');
+      setMapCenterTrigger({ coords: loc, zoom: 13, id: Date.now() });
+      showToast('Centered on your GPS location', 'success');
+      return loc;
+    } catch (err: any) {
+      if (err?.code === 1) { // PERMISSION_DENIED
+        setLocationPermissionState('denied');
+        showToast('Location permission denied. Map centered on default corridor.', 'info');
+      } else {
+        showToast('Location access is off. Enable it in Settings to center around you.', 'info');
+      }
+      return null;
+    }
+  };
+
+  const recenterOnUserLocation = () => {
+    if (userLocation) {
+      setMapCenterTrigger({ coords: userLocation, zoom: 13, id: Date.now() });
+      showToast('Centered on your location', 'info');
+    } else {
+      requestUserLocation();
+    }
+  };
+
+  const updateUserProfile = (data: Partial<UserProfile>) => {
+    const updated = AuthService.updateProfile(data);
+    setUserProfile({ ...updated });
+    showToast('Profile updated successfully', 'success');
+  };
+
+  const updateUserSettings = (data: Partial<UserSettings>) => {
+    const currentSettings = userProfile.settings || INITIAL_USER_PROFILE.settings!;
+    const updatedSettings: UserSettings = {
+      notifications: { ...currentSettings.notifications, ...(data.notifications || {}) },
+      privacy: { ...currentSettings.privacy, ...(data.privacy || {}) },
+      location: { ...currentSettings.location, ...(data.location || {}) },
+    };
+    const updated = AuthService.updateProfile({ settings: updatedSettings });
+    setUserProfile({ ...updated });
+    showToast('Settings saved', 'success');
   };
 
   const loginUser = async (emailOrPhone: string, role: UserRole) => {
@@ -333,6 +417,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setActiveTruckForDetail,
         userProfile,
         refreshUserProfile,
+        updateUserProfile,
+        updateUserSettings,
+        userLocation,
+        locationPermissionState,
+        requestUserLocation,
+        recenterOnUserLocation,
         handleBookTruck,
         handleConfirmBooking,
         handleTrackShipment,

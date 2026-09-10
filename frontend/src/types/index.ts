@@ -138,6 +138,25 @@ export interface UserProfile {
     completedTrips: number;
     activeShipments: number;
   };
+  settings?: UserSettings;
+}
+
+export interface UserSettings {
+  notifications: {
+    shipmentUpdates: boolean;
+    newTruckMatches: boolean;
+    bookingUpdates: boolean;
+    fleetOpportunities: boolean;
+  };
+  privacy: {
+    profileVisibility: boolean;
+    showCompanyInfo: boolean;
+    shareTracking: boolean;
+  };
+  location: {
+    locationServicesEnabled: boolean;
+    permissionStatus: 'granted' | 'denied' | 'prompt' | 'unsupported';
+  };
 }
 
 export interface SearchQueryParams {

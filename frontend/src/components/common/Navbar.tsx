@@ -59,10 +59,10 @@ export const Navbar: React.FC = () => {
             <>
               <button
                 onClick={() => handleNavClick('home')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                   activeView === 'home' || activeView === 'find_truck' || activeView === 'matching_results'
-                    ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-bold'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
+                    ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
                 }`}
               >
                 Find a Truck
@@ -70,10 +70,10 @@ export const Navbar: React.FC = () => {
 
               <button
                 onClick={() => handleNavClick('post_shipment')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                   activeView === 'post_shipment'
-                    ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-bold'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
+                    ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
                 }`}
               >
                 Post a Shipment
@@ -83,10 +83,10 @@ export const Navbar: React.FC = () => {
             <>
               <button
                 onClick={() => handleNavClick('find_freight')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                   activeView === 'find_freight'
-                    ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-bold'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
+                    ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
                 }`}
               >
                 Find Freight
@@ -94,10 +94,10 @@ export const Navbar: React.FC = () => {
 
               <button
                 onClick={() => handleNavClick('my_trucks')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                   activeView === 'my_trucks'
-                    ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-bold'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
+                    ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
+                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
                 }`}
               >
                 My Trucks
@@ -107,10 +107,10 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleNavClick('my_shipments')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               activeView === 'my_shipments' || activeView === 'track_shipment'
-                ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-bold'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
+                ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
+                : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
             }`}
           >
             My Shipments
@@ -118,10 +118,10 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={() => handleNavClick('smart_insights')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               activeView === 'smart_insights'
-                ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-sm font-bold'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
+                ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
+                : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
             }`}
           >
             Smart Insights

@@ -99,6 +99,26 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
         )}
       </div>
 
+      {/* Selected Location Glassmorphic Status Box */}
+      {selectedLocation && (
+        <div className="mt-1.5 p-2.5 rounded-xl glass-selected flex items-center justify-between transition-all">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-black dark:bg-white animate-pulse shrink-0" />
+            <div>
+              <div className="text-xs font-black text-[#111111] dark:text-white leading-tight">
+                {selectedLocation.name}
+              </div>
+              <div className="text-[10px] text-[#666666] dark:text-neutral-400 font-medium leading-tight mt-0.5">
+                Selected {label.toLowerCase()} · {selectedLocation.city}
+              </div>
+            </div>
+          </div>
+          <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-black/5 dark:bg-white/10 text-[#111111] dark:text-white border border-black/10 dark:border-white/10 shrink-0">
+            {selectedLocation.hubType}
+          </span>
+        </div>
+      )}
+
       {/* Autocomplete Suggestions Dropdown */}
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1 z-50 glass-modal rounded-xl border shadow-2xl max-h-56 overflow-y-auto">

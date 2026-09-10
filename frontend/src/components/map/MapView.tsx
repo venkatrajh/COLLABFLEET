@@ -23,6 +23,8 @@ export const MapView: React.FC = () => {
     setIsTruckDetailOpen,
     mapCenterTrigger,
     recenterMap,
+    userLocation,
+    recenterOnUserLocation,
     isMapExpanded,
     toggleMapExpanded,
     showToast
@@ -171,6 +173,37 @@ export const MapView: React.FC = () => {
         iconAnchor: [18, 23]
       });
     };
+
+    // 0. User Current GPS Location ("You are here")
+    if (userLocation) {
+      boundsPoints.push(userLocation);
+      const userLocIcon = L.divIcon({
+        className: 'user-location-marker',
+        html: `
+          <div class="relative flex flex-col items-center pointer-events-auto cursor-pointer">
+            <div class="relative flex items-center justify-center">
+              <span class="absolute w-6 h-6 rounded-full bg-black/20 dark:bg-white/20 animate-ping"></span>
+              <div class="w-4 h-4 rounded-full bg-black text-white dark:bg-white dark:text-black border-2 border-white dark:border-black shadow-xl flex items-center justify-center">
+                <div class="w-1.5 h-1.5 rounded-full bg-white dark:bg-black"></div>
+              </div>
+            </div>
+            <div class="mt-1 px-2 py-0.5 rounded-md bg-[#111111] text-white text-[9px] font-black shadow-lg whitespace-nowrap tracking-wide">
+              You are here
+            </div>
+          </div>
+        `,
+        iconSize: [28, 38],
+        iconAnchor: [14, 19]
+      });
+
+      const userMarker = L.marker(userLocation, { icon: userLocIcon }).bindPopup(`
+        <div class="p-1 text-center font-sans text-xs">
+          <div class="font-extrabold text-[#111111]">Your Current GPS Location</div>
+          <div class="text-[10px] text-neutral-500 mt-0.5">${userLocation[0].toFixed(4)}° N, ${userLocation[1].toFixed(4)}° E</div>
+        </div>
+      `);
+      markersLayer.addLayer(userMarker);
+    }
 
     // 1. Pickup Location
     if (searchQuery.fromLocation) {
@@ -385,23 +418,7 @@ export const MapView: React.FC = () => {
   };
 
   const handleLocateMe = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const userCoords: [number, number] = [pos.coords.latitude, pos.coords.longitude];
-          mapInstanceRef.current?.flyTo(userCoords, 12);
-          showToast('Centered on your current location', 'info');
-        },
-        () => {
-          // Graceful fallback to Chennai
-          mapInstanceRef.current?.flyTo([13.0827, 80.2707], 10);
-          showToast('Centered on Chennai Hub (Location permission denied)', 'info');
-        }
-      );
-    } else {
-      mapInstanceRef.current?.flyTo([13.0827, 80.2707], 10);
-      showToast('Centered on Chennai Hub', 'info');
-    }
+    recenterOnUserLocation();
   };
 
   const handleRecenter = () => {
