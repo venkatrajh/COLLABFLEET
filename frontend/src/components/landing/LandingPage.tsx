@@ -25,11 +25,11 @@ export const LandingPage: React.FC = () => {
 
   // 1. Rotating Animated Value Proposition Headline
   const HEADLINES = [
-    { main: 'Move More.\nWaste Less.', sub: 'AI-powered freight matching connecting shipments with available truck capacity.' },
-    { main: 'AI-powered freight matching.', sub: 'Intelligent multi-factor scoring matching cargo to available truck capacity in seconds.' },
-    { main: 'Smarter return journeys.', sub: 'Eliminating deadhead kilometers by monetizing empty capacity heading back home.' },
-    { main: 'Less empty capacity.', sub: 'Turn wasted vehicle volume into profitable collaborative backhaul trips.' },
-    { main: 'Better fleet utilization.', sub: 'Maximizing operator trip revenues while slashing carbon emissions across India.' }
+    { main: 'Move More.\nWaste Less.', sub: 'AI-powered freight matching connecting shipments with available truck capacity and smarter return journeys.' },
+    { main: 'Smarter Freight\nMatching.', sub: 'Intelligent multi-factor scoring connecting shippers with verified carriers in seconds.' },
+    { main: 'Better Return\nJourneys.', sub: 'Eliminating deadhead kilometers by converting empty return trips into profitable revenue.' },
+    { main: 'Less Empty\nCapacity.', sub: 'Turn unused container space and wasted volume into collaborative backhaul freight.' },
+    { main: 'Better Fleet\nUtilization.', sub: 'Maximizing truck trip earnings while reducing empty kilometers and emissions across India.' }
   ];
 
   const [headlineIdx, setHeadlineIdx] = useState(0);
@@ -62,9 +62,6 @@ export const LandingPage: React.FC = () => {
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-base tracking-tight text-white">
                 COLLABFLEET
-              </span>
-              <span className="px-1.5 py-0.5 text-[9px] font-black tracking-widest uppercase bg-neutral-800 text-neutral-200 rounded">
-                AI
               </span>
             </div>
           </div>
@@ -109,17 +106,34 @@ export const LandingPage: React.FC = () => {
         </div>
       </header>
 
-      {/* 2. HERO SECTION — LEFT-ALIGNED COMPACT GRID */}
-      <section className="relative pt-10 sm:pt-16 pb-16 sm:pb-24 border-b border-neutral-200/80 dark:border-neutral-900 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+      {/* 2. HERO SECTION — ENHANCED LAYERED NEAR-BLACK CANVAS */}
+      <section className="relative pt-12 sm:pt-20 pb-16 sm:pb-24 border-b border-neutral-800/80 bg-[#060606] overflow-hidden">
+        
+        {/* Layer 1: Very Faint Engineering Grid */}
+        <div className="absolute inset-0 bg-engineering-grid opacity-25 pointer-events-none" />
+
+        {/* Layer 2: Subtle Atmospheric Radial Lighting behind Hero */}
+        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[580px] h-[580px] rounded-full bg-gradient-to-tr from-cyan-950/20 via-neutral-900/30 to-transparent blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/2 right-1/4 w-[420px] h-[420px] rounded-full bg-gradient-to-bl from-blue-950/20 via-neutral-900/20 to-transparent blur-[100px] pointer-events-none" />
+
+        {/* Layer 3: Faint Architectural Route Lines in background */}
+        <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10%" y1="20%" x2="45%" y2="55%" stroke="#38BDF8" strokeWidth="1" strokeDasharray="6 6" />
+          <line x1="45%" y1="55%" x2="85%" y2="35%" stroke="#FFFFFF" strokeWidth="1" strokeDasharray="4 8" />
+          <circle cx="10%" cy="20%" r="3" fill="#38BDF8" />
+          <circle cx="45%" cy="55%" r="3" fill="#FFFFFF" />
+          <circle cx="85%" cy="35%" r="3" fill="#38BDF8" />
+        </svg>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
             
             {/* Left Content (Columns 1-7) */}
             <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-left">
               
               {/* Eyebrow Label */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-[11px] font-bold text-neutral-800 dark:text-neutral-200 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-black dark:bg-white animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900/90 border border-neutral-800 text-[11px] font-bold text-neutral-300 shadow-sm backdrop-blur-md">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                 <span>Next-Gen Freight Capacity Exchange</span>
               </div>
 
@@ -127,15 +141,15 @@ export const LandingPage: React.FC = () => {
               <div className="min-h-[120px] sm:min-h-[150px] flex flex-col justify-start">
                 <h1 
                   key={headlineIdx} 
-                  className="text-4xl sm:text-6xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] whitespace-pre-line animate-text-transition text-neutral-900 dark:text-white"
+                  className="text-4xl sm:text-6xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] whitespace-pre-line animate-text-transition text-white"
                 >
                   {HEADLINES[headlineIdx].main}
                 </h1>
               </div>
 
               {/* Supporting Text */}
-              <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 font-normal max-w-xl leading-relaxed">
-                {HEADLINES[headlineIdx].sub}
+              <p className="text-sm sm:text-base text-neutral-400 font-normal max-w-xl leading-relaxed">
+                AI-powered freight matching connecting shipments with available truck capacity and smarter return journeys.
               </p>
 
               {/* Direct CTAs */}
@@ -145,7 +159,7 @@ export const LandingPage: React.FC = () => {
                     const el = document.getElementById('role-selection');
                     el?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="px-6 py-3 rounded-2xl bg-black text-white dark:bg-white dark:text-black font-extrabold text-xs sm:text-sm shadow-lg hover:opacity-90 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
+                  className="px-6 py-3 rounded-2xl bg-white text-black font-extrabold text-xs sm:text-sm shadow-lg hover:bg-neutral-100 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
                 >
                   <span>Get Started</span>
                   <ArrowRight className="w-4 h-4" />
@@ -153,24 +167,24 @@ export const LandingPage: React.FC = () => {
 
                 <a
                   href="#how-it-works"
-                  className="px-5 py-3 rounded-2xl bg-white dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center justify-center gap-2"
+                  className="px-5 py-3 rounded-2xl bg-neutral-900/80 hover:bg-neutral-900 border border-neutral-800 text-white font-bold text-xs sm:text-sm shadow-sm transition-all flex items-center justify-center gap-2"
                 >
                   <span>See How It Works</span>
                 </a>
               </div>
 
               {/* Trust Information */}
-              <div className="pt-3 border-t border-neutral-200/80 dark:border-neutral-800 flex flex-wrap items-center gap-6 text-xs text-neutral-500 font-medium">
+              <div className="pt-4 border-t border-neutral-800/80 flex flex-wrap items-center gap-6 text-xs text-neutral-400 font-medium">
                 <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-black dark:text-white" />
+                  <Check className="w-4 h-4 text-cyan-400" />
                   <span>Instant Return-Trip Matching</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-black dark:text-white" />
+                  <Check className="w-4 h-4 text-cyan-400" />
                   <span>Explainable AI Reasoning</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-black dark:text-white" />
+                  <Check className="w-4 h-4 text-cyan-400" />
                   <span>Live Map Telemetry</span>
                 </div>
               </div>
@@ -458,11 +472,11 @@ export const LandingPage: React.FC = () => {
               Turn empty kilometres into productive journeys.
             </h2>
             <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-              In traditional freight, up to 40% of trucks return empty. CollabFleet AI pairs returning vehicles with waiting cargo to eliminate waste.
+              In traditional freight, up to 40% of trucks return empty. COLLABFLEET pairs returning vehicles with waiting cargo to eliminate waste.
             </p>
           </div>
 
-          {/* Side-by-Side: Before vs After CollabFleet */}
+          {/* Side-by-Side: Before vs After COLLABFLEET */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             {/* Before Card */}
@@ -507,7 +521,7 @@ export const LandingPage: React.FC = () => {
               <div className="flex items-center justify-between pb-3 border-b border-neutral-900">
                 <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                  After: With CollabFleet AI
+                  After: With COLLABFLEET
                 </span>
                 <span className="text-[11px] font-mono text-emerald-400 font-bold">0% Empty Miles</span>
               </div>
@@ -680,7 +694,7 @@ export const LandingPage: React.FC = () => {
                 <div className="w-7 h-7 rounded-lg bg-white text-black flex items-center justify-center font-black">
                   <Truck className="w-3.5 h-3.5" />
                 </div>
-                <span className="font-extrabold text-sm text-white">COLLABFLEET AI</span>
+                <span className="font-extrabold text-sm text-white">COLLABFLEET</span>
               </div>
               <p className="text-[11px] text-neutral-400 font-medium">
                 Move More. Waste Less.
@@ -727,7 +741,7 @@ export const LandingPage: React.FC = () => {
 
           <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-500">
             <div>
-              © 2026 COLLABFLEET AI. All rights reserved.
+              © 2026 COLLABFLEET. All rights reserved.
             </div>
             <div>
               Built with Leaflet, OpenStreetMap, React & FastAPI

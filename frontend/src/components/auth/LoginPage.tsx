@@ -176,7 +176,7 @@ export const LoginPage: React.FC = () => {
             
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-bold text-neutral-200 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-              <span>COLLABFLEET AI SECURE ACCESS</span>
+              <span>COLLABFLEET SECURE ACCESS</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-white">
@@ -565,7 +565,7 @@ export const LoginPage: React.FC = () => {
 
       {/* Footer */}
       <footer className="py-6 border-t border-neutral-900 text-[11px] text-neutral-500 text-center">
-        COLLABFLEET AI · Protected Demo Authentication · OpenStreetMap Intelligence
+        COLLABFLEET · Protected Demo Authentication · OpenStreetMap Intelligence
       </footer>
 
     </div>

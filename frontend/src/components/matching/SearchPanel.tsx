@@ -35,7 +35,7 @@ export const SearchPanel: React.FC = () => {
     startFreightSearch();
   };
 
-  // 1. Collapsed Mode (Uber / Ola compact pill)
+  // 1. Collapsed Mode (Compact floating pill)
   if (isSearchPanelCollapsed) {
     return (
       <div className="w-full max-w-sm glass-panel rounded-2xl p-3 border shadow-xl flex items-center justify-between pointer-events-auto transition-all animate-fadeIn">
@@ -43,29 +43,29 @@ export const SearchPanel: React.FC = () => {
           onClick={() => setIsSearchPanelCollapsed(false)}
           className="cursor-pointer flex-1"
         >
-          <div className="flex items-center gap-1.5 text-xs font-black text-neutral-900 dark:text-white">
-            <span>{searchQuery.fromLocation?.name || 'Chennai'}</span>
-            <span className="text-neutral-400">→</span>
-            <span>{searchQuery.toLocation?.name || 'Bengaluru'}</span>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-black dark:bg-white" />
+            <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200 truncate">
+              {searchQuery.fromLocation?.name || 'Chennai'} → {searchQuery.toLocation?.name || 'Bengaluru'}
+            </span>
           </div>
-          <div className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-0.5">
-            {searchQuery.weightTons}T · {searchQuery.cargoType}
+          <div className="text-[10px] text-neutral-500 pl-4 mt-0.5">
+            {searchQuery.weightTons} Tons · {searchQuery.cargoType}
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 pl-2 border-l border-neutral-200 dark:border-neutral-800">
           <button
             onClick={() => startFreightSearch()}
-            className="px-3 py-1.5 rounded-xl bg-black dark:bg-white text-white dark:text-black text-xs font-bold shadow hover:opacity-90 transition-all flex items-center gap-1"
+            className="p-2 rounded-xl bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-all shadow-sm"
+            title="Search Trucks"
           >
-            <Search className="w-3 h-3" />
-            <span>Find</span>
+            <Search className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => setIsSearchPanelCollapsed(false)}
-            className="p-1 text-neutral-500 hover:text-black dark:hover:text-white"
-            title="Expand search"
-            aria-label="Expand"
+            className="p-2 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 transition-colors"
+            title="Expand Search"
           >
             <ChevronDown className="w-4 h-4" />
           </button>
@@ -74,7 +74,7 @@ export const SearchPanel: React.FC = () => {
     );
   }
 
-  // 2. Expanded Mode (Clean Uber/Rapido-style card)
+  // 2. Expanded Mode (Full route entry card)
   return (
     <div className="w-full max-w-sm glass-panel rounded-3xl p-4 sm:p-5 border shadow-2xl space-y-3.5 pointer-events-auto transition-all">
       

@@ -436,7 +436,7 @@ export const MapView: React.FC = () => {
         style={{ height: '100vh', width: '100vw' }}
       />
 
-      {/* Floating Map Controls (Right Side - Uber/Ola style) */}
+      {/* Floating Map Controls (Right Side Floating Cluster) */}
       <div className="fixed right-4 sm:right-6 bottom-24 sm:bottom-10 z-30 flex flex-col items-center gap-2 pointer-events-auto">
         
         {/* Zoom In/Out Cluster */}

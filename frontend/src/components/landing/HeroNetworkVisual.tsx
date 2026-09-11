@@ -89,12 +89,12 @@ export const HeroNetworkVisual: React.FC = () => {
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
           </span>
           <span className="text-xs font-bold text-white tracking-tight">
-            Live Freight Network · Corridor 04
+            COLLABFLEET Network · Corridor 04
           </span>
         </div>
         <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-neutral-900 border border-neutral-800 text-[10px] font-extrabold text-white">
           <Sparkles className="w-3 h-3 text-cyan-400" />
-          <span>94% AI Fit</span>
+          <span>94% Match</span>
         </div>
       </div>
 

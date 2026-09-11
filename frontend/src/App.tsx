@@ -114,7 +114,7 @@ export const App: React.FC = () => {
               </div>
             )}
 
-            {/* VIEW: MATCHING RESULTS (Uber/Ola-style Ride Selection) */}
+            {/* VIEW: MATCHING RESULTS (Ride & Truck Capacity Selection) */}
             {activeView === 'matching_results' && (
               <div className="flex flex-col lg:flex-row items-start gap-4 pt-1 pointer-events-none">
                 <div className="w-full sm:w-[380px] space-y-2.5 pointer-events-auto">

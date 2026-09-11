@@ -96,7 +96,7 @@
   cursor: pointer !important;
 }
 
-/* Hide default leaflet zoom since we have custom floating Uber-style controls */
+/* Hide default leaflet zoom since we have custom floating controls */
 .leaflet-control-zoom {
   display: none !important;
 }

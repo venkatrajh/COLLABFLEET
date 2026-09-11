@@ -46,9 +46,6 @@ export const Navbar: React.FC = () => {
             <span className="font-extrabold text-base tracking-tight font-sans text-neutral-900 dark:text-white">
               COLLABFLEET
             </span>
-            <span className="px-1.5 py-0.2 text-[9px] font-black tracking-widest uppercase bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 rounded">
-              AI
-            </span>
           </div>
         </div>
 

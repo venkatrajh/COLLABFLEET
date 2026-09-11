@@ -1,5 +1,5 @@
 /**
- * Central API Client for CollabFleet AI
+ * Central API Client for COLLABFLEET
  * Supports backend connection via VITE_API_BASE_URL (FastAPI)
  * Gracefully and seamlessly falls back to mock logic when backend is offline
  */
