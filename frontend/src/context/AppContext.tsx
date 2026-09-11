@@ -29,7 +29,9 @@ interface AppContextType {
   
   // Authentication & Role
   isAuthenticated: boolean;
-  loginUser: (emailOrPhone: string, role: UserRole) => Promise<void>;
+  loginUser: (emailOrPhone: string, role?: UserRole) => Promise<void>;
+  signUpUser: (fullName: string, email: string, password?: string) => Promise<void>;
+  signInWithGoogle: () => Promise<boolean>; // returns true if new account needing role selection
   logoutUser: () => void;
   currentRole: UserRole;
   setRole: (role: UserRole) => void;
@@ -265,18 +267,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showToast('Settings saved', 'success');
   };
 
-  const loginUser = async (emailOrPhone: string, role: UserRole) => {
-    const user = await AuthService.login(emailOrPhone, role);
+  const loginUser = async (emailOrPhone: string, role?: UserRole) => {
+    const chosenRole = role || currentRole;
+    const user = await AuthService.signIn(emailOrPhone, 'demo-password', chosenRole);
     setIsAuthenticated(true);
-    setCurrentRoleState(role);
+    setCurrentRoleState(chosenRole);
     setUserProfile(user);
-    // Role-specific landing directly into the application
-    if (role === 'fleet_operator') {
+    if (chosenRole === 'fleet_operator') {
       setActiveView('find_freight');
     } else {
       setActiveView('home');
     }
-    showToast(`Welcome ${user.name}! Signed in as ${role === 'shipper' ? 'Shipper' : 'Fleet Owner'}`, 'success');
+    showToast(`Welcome back, ${user.name}! Signed in as ${chosenRole === 'shipper' ? 'Shipper' : 'Fleet Owner'}`, 'success');
+  };
+
+  const signUpUser = async (fullName: string, email: string, password?: string) => {
+    const user = await AuthService.signUp(fullName, email, password);
+    setIsAuthenticated(true);
+    setUserProfile(user);
+    showToast('Account created successfully!', 'success');
+  };
+
+  const signInWithGoogle = async (): Promise<boolean> => {
+    const result = await AuthService.signInWithGoogle();
+    setIsAuthenticated(true);
+    setUserProfile(result.user);
+    showToast(`Signed in with Google as ${result.user.name}`, 'success');
+    return result.isNewAccount;
   };
 
   const logoutUser = () => {
@@ -379,6 +396,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleTheme,
         isAuthenticated,
         loginUser,
+        signUpUser,
+        signInWithGoogle,
         logoutUser,
         currentRole,
         setRole,

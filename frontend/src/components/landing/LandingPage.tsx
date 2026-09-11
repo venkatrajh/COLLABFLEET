@@ -18,15 +18,18 @@ import {
   BarChart3,
   MapPin
 } from 'lucide-react';
+import { HeroNetworkVisual } from './HeroNetworkVisual';
 
 export const LandingPage: React.FC = () => {
   const { setActiveView, setRole } = useApp();
 
-  // 1. Rotating Value Proposition Headline
+  // 1. Rotating Animated Value Proposition Headline
   const HEADLINES = [
-    { main: 'Move More.\nWaste Less.', sub: 'AI-powered freight matching that connects shipments with available truck capacity and smarter return journeys.' },
-    { main: 'Turn Empty Miles\nInto Value.', sub: 'Eliminate deadhead kilometers with intelligent multi-factor matching for shippers and fleet operators.' },
-    { main: 'Smarter Freight.\nBetter Trips.', sub: 'Real-time collaborative capacity pooling that reduces logistics spend and lowers carbon emissions.' }
+    { main: 'Move More.\nWaste Less.', sub: 'AI-powered freight matching connecting shipments with available truck capacity.' },
+    { main: 'AI-powered freight matching.', sub: 'Intelligent multi-factor scoring matching cargo to available truck capacity in seconds.' },
+    { main: 'Smarter return journeys.', sub: 'Eliminating deadhead kilometers by monetizing empty capacity heading back home.' },
+    { main: 'Less empty capacity.', sub: 'Turn wasted vehicle volume into profitable collaborative backhaul trips.' },
+    { main: 'Better fleet utilization.', sub: 'Maximizing operator trip revenues while slashing carbon emissions across India.' }
   ];
 
   const [headlineIdx, setHeadlineIdx] = useState(0);
@@ -34,9 +37,9 @@ export const LandingPage: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setHeadlineIdx(prev => (prev + 1) % HEADLINES.length);
-    }, 4500);
+    }, 3200);
     return () => clearInterval(timer);
-  }, []);
+  }, [HEADLINES.length]);
 
   // Handler for Role-Based Start
   const handleSelectRoleAndProceed = (role: UserRole) => {
@@ -174,88 +177,9 @@ export const LandingPage: React.FC = () => {
 
             </div>
 
-            {/* Right Visual Element (Columns 8-12) */}
+            {/* Right Visual Element (Columns 8-12): Interactive Miniature Freight Network */}
             <div className="lg:col-span-5 relative">
-              <div className="relative rounded-3xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 sm:p-5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-2xl overflow-hidden animate-float">
-                
-                {/* Live Corridor Status Header */}
-                <div className="flex items-center justify-between pb-3 border-b border-neutral-200/80 dark:border-neutral-800 mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-black dark:bg-white animate-ping" />
-                    <span className="text-xs font-bold text-neutral-900 dark:text-white">Active Corridor Match</span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded-md bg-black text-white dark:bg-white dark:text-black text-[10px] font-extrabold">
-                    94% AI Fit
-                  </span>
-                </div>
-
-                {/* Simulated Graphic of India Route */}
-                <div className="relative h-64 rounded-2xl bg-[#F7F7F5] dark:bg-neutral-950 border border-neutral-200/80 dark:border-neutral-800 p-4 flex flex-col justify-between overflow-hidden">
-                  
-                  {/* Background grid */}
-                  <div className="absolute inset-0 opacity-15 dark:opacity-20 bg-[radial-gradient(#000_1px,transparent_1px)] dark:bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
-
-                  {/* Route Nodes */}
-                  <div className="relative z-10 flex items-center justify-between">
-                    <div>
-                      <span className="text-[9px] uppercase font-bold text-neutral-400 block">Pickup Hub</span>
-                      <span className="text-xs sm:text-sm font-black text-neutral-900 dark:text-white">Chennai Port</span>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <span className="text-[10px] font-mono font-bold text-neutral-500">346 km</span>
-                      <div className="w-24 h-0.5 bg-neutral-300 dark:bg-neutral-700 relative my-1">
-                        <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-black dark:bg-white flex items-center justify-center text-[7px] text-white dark:text-black shadow">
-                          ▶
-                        </div>
-                      </div>
-                      <span className="text-[9px] font-extrabold text-neutral-700 dark:text-neutral-300">Return Corridor</span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[9px] uppercase font-bold text-neutral-400 block">Destination</span>
-                      <span className="text-xs sm:text-sm font-black text-neutral-900 dark:text-white">Bengaluru Inland</span>
-                    </div>
-                  </div>
-
-                  {/* Live Matched Truck Badge */}
-                  <div className="relative z-10 p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-black text-white dark:bg-white dark:text-black flex items-center justify-center text-xs font-black shadow-sm">
-                        <Truck className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-extrabold text-neutral-900 dark:text-white">Ashok Leyland 1618</div>
-                        <div className="text-[10px] text-neutral-500">8.5 T available · 12 min away</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs font-black text-neutral-900 dark:text-white">₹8,400</div>
-                      <div className="text-[9px] font-bold text-neutral-500">Save ₹1,850</div>
-                    </div>
-                  </div>
-
-                  {/* Metric Ribbon */}
-                  <div className="relative z-10 grid grid-cols-3 gap-2 text-center pt-2 border-t border-neutral-200/60 dark:border-neutral-900">
-                    <div>
-                      <div className="text-[9px] text-neutral-400 font-semibold uppercase">Deadhead Saved</div>
-                      <div className="text-xs font-black text-neutral-900 dark:text-white">67 km</div>
-                    </div>
-                    <div>
-                      <div className="text-[9px] text-neutral-400 font-semibold uppercase">CO₂ Avoided</div>
-                      <div className="text-xs font-black text-neutral-900 dark:text-white">38 kg</div>
-                    </div>
-                    <div>
-                      <div className="text-[9px] text-neutral-400 font-semibold uppercase">Driver Score</div>
-                      <div className="text-xs font-black text-neutral-900 dark:text-white">★ 4.9</div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="text-[10px] text-neutral-500 text-center mt-2.5 font-medium">
-                  Interactive real-time map active upon application launch
-                </div>
-
-              </div>
+              <HeroNetworkVisual />
             </div>
 
           </div>
@@ -437,55 +361,181 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. COLLABORATION / EMPTY MILES SECTION */}
-      <section id="empty-miles" className="py-16 sm:py-24 border-b border-neutral-200/80 dark:border-neutral-900 bg-white dark:bg-neutral-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 text-left space-y-8">
+      {/* 5. COLLABORATION SCORE SECTION */}
+      <section id="collaboration-score" className="py-16 sm:py-24 border-b border-neutral-800 bg-neutral-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* Left Narrative */}
+            <div className="lg:col-span-7 space-y-4 text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[10px] font-bold uppercase tracking-wider text-cyan-400">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Ecosystem Contribution Index</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                Collaboration Score
+              </h2>
+              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-xl">
+                A proprietary metric measuring how effectively a fleet operator or shipper contributes to shared freight capacity, backhaul fulfillment, and deadhead elimination.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+                <div className="p-3.5 rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-1">
+                  <div className="text-[10px] font-bold uppercase text-neutral-500">Space Sharing</div>
+                  <div className="font-extrabold text-white text-sm">96%</div>
+                  <div className="text-[10px] text-neutral-400">Shared volume utilization</div>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-1">
+                  <div className="text-[10px] font-bold uppercase text-neutral-500">Backhaul Ratio</div>
+                  <div className="font-extrabold text-white text-sm">92%</div>
+                  <div className="text-[10px] text-neutral-400">Return legs monetized</div>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-1">
+                  <div className="text-[10px] font-bold uppercase text-neutral-500">Partner Trust</div>
+                  <div className="font-extrabold text-white text-sm">★ 4.95</div>
+                  <div className="text-[10px] text-neutral-400">Zero default records</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Circular Gauge */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="relative w-64 h-64 rounded-full bg-neutral-900/70 border border-neutral-800 flex flex-col items-center justify-center p-6 shadow-2xl">
+                
+                {/* Outer SVG Ring */}
+                <svg className="w-full h-full -rotate-90 transform" viewBox="0 0 100 100">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    className="text-neutral-800"
+                    strokeWidth="6"
+                    stroke="currentColor"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    className="text-cyan-400"
+                    strokeWidth="6"
+                    strokeDasharray={264}
+                    strokeDashoffset={264 * (1 - 0.94)}
+                    strokeLinecap="round"
+                    stroke="currentColor"
+                    fill="transparent"
+                  />
+                </svg>
+
+                <div className="absolute flex flex-col items-center justify-center text-center space-y-0.5">
+                  <span className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight">
+                    94
+                  </span>
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-cyan-400">
+                    High Collaboration
+                  </span>
+                  <span className="text-[9px] text-neutral-500 max-w-[120px]">
+                    Top 5% of network operators
+                  </span>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 6. RETURN-TRIP PROBLEM VS SOLUTION VISUALIZATION */}
+      <section id="empty-miles" className="py-16 sm:py-24 border-b border-neutral-800 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 text-left space-y-10">
           
           <div className="max-w-2xl space-y-2">
             <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-              The Economic Problem
+              The Economic Problem & Solution
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-neutral-900 dark:text-white tracking-tight">
-              Turn empty miles into opportunity.
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              Turn empty kilometres into productive journeys.
             </h2>
-            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-              When trucks return with unused capacity, CollabFleet connects them with nearby freight instead of letting that capacity go to waste.
+            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+              In traditional freight, up to 40% of trucks return empty. CollabFleet AI pairs returning vehicles with waiting cargo to eliminate waste.
             </p>
           </div>
 
-          {/* Visual Transformation Flow */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3.5 items-center">
+          {/* Side-by-Side: Before vs After CollabFleet */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-            <div className="p-5 rounded-2xl bg-[#F7F7F5] dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 space-y-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-              <span className="text-[9px] font-bold uppercase text-neutral-400 block">Stage 1</span>
-              <h4 className="text-xs sm:text-sm font-black text-neutral-900 dark:text-white">Empty Return Trip</h4>
-              <p className="text-[11px] text-neutral-500">
-                Truck unloads at destination and faces empty kilometers heading back home.
+            {/* Before Card */}
+            <div className="p-6 rounded-3xl bg-neutral-950 border border-neutral-800 space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-900">
+                <span className="text-xs font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-red-500" />
+                  Before: Traditional Logistics
+                </span>
+                <span className="text-[11px] font-mono text-neutral-500 font-bold">40% Deadhead</span>
+              </div>
+
+              {/* Schematic */}
+              <div className="py-6 px-4 rounded-2xl bg-black border border-neutral-900 space-y-6">
+                <div className="flex items-center justify-between text-xs">
+                  <div className="font-bold text-white">Chennai Port</div>
+                  <div className="flex-1 mx-4 flex items-center justify-center gap-1 text-[10px] text-neutral-400 border-b border-neutral-700 pb-1">
+                    <span>Full Cargo Load (8 T)</span>
+                    <span>→ 🚚 →</span>
+                  </div>
+                  <div className="font-bold text-white">Bengaluru</div>
+                </div>
+
+                <div className="flex items-center justify-between text-xs opacity-75">
+                  <div className="font-bold text-neutral-500">Bengaluru</div>
+                  <div className="flex-1 mx-4 flex items-center justify-center gap-1 text-[10px] text-red-400 border-b border-dashed border-red-800 pb-1">
+                    <span>← 🚚 EMPTY RETURN (Deadhead 346 km) ←</span>
+                  </div>
+                  <div className="font-bold text-neutral-500">Chennai Port</div>
+                </div>
+              </div>
+
+              <p className="text-[11px] text-neutral-500 leading-relaxed">
+                Truck delivers cargo and is forced to return completely empty, wasting fuel, driver wages, and emitting unnecessary CO₂.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#F7F7F5] dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 space-y-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-              <span className="text-[9px] font-bold uppercase text-neutral-400 block">Stage 2</span>
-              <h4 className="text-xs sm:text-sm font-black text-neutral-900 dark:text-white">AI Discovers Freight</h4>
-              <p className="text-[11px] text-neutral-500">
-                CollabFleet algorithms find compatible shipments along that exact return path.
-              </p>
-            </div>
+            {/* After Card */}
+            <div className="p-6 rounded-3xl bg-neutral-950 border border-neutral-700 space-y-4 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
 
-            <div className="p-5 rounded-2xl bg-[#F7F7F5] dark:bg-neutral-900 border border-neutral-200/70 dark:border-neutral-800 space-y-1.5 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-              <span className="text-[9px] font-bold uppercase text-neutral-400 block">Stage 3</span>
-              <h4 className="text-xs sm:text-sm font-black text-neutral-900 dark:text-white">Shared Capacity</h4>
-              <p className="text-[11px] text-neutral-500">
-                Multiple shippers or return freight seamlessly book the unutilized space.
-              </p>
-            </div>
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-900">
+                <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                  After: With CollabFleet AI
+                </span>
+                <span className="text-[11px] font-mono text-emerald-400 font-bold">0% Empty Miles</span>
+              </div>
 
-            <div className="p-5 rounded-2xl bg-black text-white dark:bg-white dark:text-black border border-black dark:border-white space-y-1.5 shadow-md">
-              <span className="text-[9px] font-bold uppercase opacity-75 block">Outcome</span>
-              <h4 className="text-xs sm:text-sm font-black">Lower Waste & High Profit</h4>
-              <p className="text-[11px] opacity-90">
-                Shippers save up to 25% on freight, and fleet owners double their trip revenue.
-              </p>
+              {/* Schematic */}
+              <div className="py-6 px-4 rounded-2xl bg-black border border-neutral-900 space-y-6">
+                <div className="flex items-center justify-between text-xs">
+                  <div className="font-bold text-white">Chennai Port</div>
+                  <div className="flex-1 mx-4 flex items-center justify-center gap-1 text-[10px] text-white border-b border-neutral-700 pb-1">
+                    <span>Primary Load</span>
+                    <span>→ 🚚 →</span>
+                  </div>
+                  <div className="font-bold text-white">Bengaluru</div>
+                </div>
+
+                <div className="flex items-center justify-between text-xs">
+                  <div className="font-bold text-white">Bengaluru</div>
+                  <div className="flex-1 mx-4 flex items-center justify-center gap-1 text-[10px] text-emerald-400 border-b border-emerald-500 pb-1 font-bold">
+                    <span>← 🚚 AI RETURN LOAD (Electronics 8.5T) ←</span>
+                  </div>
+                  <div className="font-bold text-white">Chennai Port</div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] text-neutral-300 pt-1">
+                <span>Shipper savings: <strong className="text-emerald-400">Save ₹1,850</strong></span>
+                <span>Fleet revenue: <strong className="text-white">+₹8,400 backhaul</strong></span>
+              </div>
             </div>
 
           </div>
@@ -619,15 +669,69 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 8. Minimalist Monochrome Footer */}
-      <footer className="py-10 border-t border-neutral-200 dark:border-neutral-800 text-xs text-neutral-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-neutral-900 dark:text-white">COLLABFLEET AI</span>
-            <span>· Collaborative Logistics Intelligence</span>
+      {/* 8. Minimalist Premium Footer */}
+      <footer className="py-14 border-t border-neutral-900 bg-black text-xs text-neutral-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-10 border-b border-neutral-900">
+            
+            {/* Col 1: Brand */}
+            <div className="space-y-2.5">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-white text-black flex items-center justify-center font-black">
+                  <Truck className="w-3.5 h-3.5" />
+                </div>
+                <span className="font-extrabold text-sm text-white">COLLABFLEET AI</span>
+              </div>
+              <p className="text-[11px] text-neutral-400 font-medium">
+                Move More. Waste Less.
+              </p>
+              <p className="text-[11px] text-neutral-500 leading-relaxed">
+                Next-generation freight capacity exchange connecting verified carriers and shippers with zero commission deadhead matching.
+              </p>
+            </div>
+
+            {/* Col 2: Product */}
+            <div className="space-y-2">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-neutral-300">Product</div>
+              <ul className="space-y-1.5 text-[11px] text-neutral-400">
+                <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
+                <li><a href="#explainable-ai" className="hover:text-white transition-colors">AI Intelligence</a></li>
+                <li><a href="#collaboration-score" className="hover:text-white transition-colors">Collaboration Score</a></li>
+                <li><a href="#impact" className="hover:text-white transition-colors">Impact Analytics</a></li>
+              </ul>
+            </div>
+
+            {/* Col 3: Company */}
+            <div className="space-y-2">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-neutral-300">Company</div>
+              <ul className="space-y-1.5 text-[11px] text-neutral-400">
+                <li><span className="hover:text-white cursor-pointer transition-colors">About Us</span></li>
+                <li><span className="hover:text-white cursor-pointer transition-colors">India Freight Network</span></li>
+                <li><span className="hover:text-white cursor-pointer transition-colors">Careers</span></li>
+                <li><span className="hover:text-white cursor-pointer transition-colors">Contact</span></li>
+              </ul>
+            </div>
+
+            {/* Col 4: Legal */}
+            <div className="space-y-2">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-neutral-300">Legal</div>
+              <ul className="space-y-1.5 text-[11px] text-neutral-400">
+                <li><span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span></li>
+                <li><span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span></li>
+                <li><span className="hover:text-white cursor-pointer transition-colors">Security</span></li>
+                <li><span className="hover:text-white cursor-pointer transition-colors">Compliance</span></li>
+              </ul>
+            </div>
+
           </div>
-          <div>
-            Built with Leaflet, OpenStreetMap, React & FastAPI
+
+          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-neutral-500">
+            <div>
+              © 2026 COLLABFLEET AI. All rights reserved.
+            </div>
+            <div>
+              Built with Leaflet, OpenStreetMap, React & FastAPI
+            </div>
           </div>
         </div>
       </footer>

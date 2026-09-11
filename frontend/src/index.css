@@ -166,3 +166,29 @@
 .animate-float {
   animation: float-subtle 4s ease-in-out infinite;
 }
+
+/* Route Dash Animation for Hero Network */
+@keyframes route-flow {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-route-flow {
+  stroke-dasharray: 6 6;
+  animation: route-flow 1.8s linear infinite;
+}
+
+/* Subtle Engineering Grid Background */
+.bg-engineering-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.light .bg-engineering-grid {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+}
+
