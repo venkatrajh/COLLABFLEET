@@ -1,0 +1,270 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#F4F3EF] dark:bg-black text-[#111111] dark:text-neutral-100 antialiased overflow-x-hidden transition-colors duration-200;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Sleek minimalist scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 dark:bg-neutral-800 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400 dark:bg-neutral-700;
+  }
+}
+
+/* Minimalist Monochrome Glassmorphism (Warm Light App / Pure Dark Landing) */
+.glass-panel {
+  @apply bg-white/95 dark:bg-black/90 backdrop-blur-md border border-[#DEDDD8] dark:border-neutral-800/90 shadow-sm dark:shadow-black/60 text-[#111111] dark:text-white transition-colors duration-200;
+}
+
+.glass-card {
+  @apply bg-white dark:bg-neutral-950/90 border border-[#DEDDD8] dark:border-neutral-800/80 shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-none hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:hover:border-neutral-600 text-[#111111] dark:text-white transition-all duration-200;
+}
+
+.glass-card-hover:hover {
+  @apply border-[#111111] dark:border-white shadow-lg -translate-y-0.5;
+}
+
+.glass-input {
+  @apply bg-[#F0EFEA] dark:bg-neutral-900/90 border border-[#DEDDD8] dark:border-neutral-800 text-[#111111] dark:text-white focus:border-[#111111] dark:focus:border-white focus:bg-white focus:outline-none transition-all;
+}
+
+.glass-modal {
+  @apply bg-white dark:bg-neutral-950 border border-[#DEDDD8] dark:border-neutral-800 shadow-2xl text-[#111111] dark:text-white;
+}
+
+/* Leaflet Map Theme Styling — Balanced & Stable */
+.dark .dark-map .leaflet-tile-pane {
+  filter: brightness(0.65) invert(1) contrast(1.1) hue-rotate(185deg) saturate(0.15);
+  transition: filter 0.3s ease;
+}
+
+.light-map .leaflet-tile-pane {
+  filter: brightness(1.02) contrast(1.01) saturate(0.92);
+  transition: filter 0.3s ease;
+}
+
+.leaflet-container {
+  background: #F4F3EF !important;
+  font-family: inherit !important;
+  outline: none !important;
+}
+
+.dark .leaflet-container {
+  background: #000000 !important;
+}
+
+/* Leaflet Map Cursor Rules — White Hand with Bold Black Edges (High Contrast) */
+.leaflet-container,
+.leaflet-container *,
+.leaflet-grab,
+.leaflet-pane,
+.leaflet-tile-pane,
+.leaflet-tile-container,
+.leaflet-tile {
+  cursor: url('/cursors/grab.svg') 14 14, grab !important;
+}
+
+.leaflet-container.leaflet-dragging,
+.leaflet-container.leaflet-dragging *,
+.leaflet-dragging .leaflet-grab,
+.leaflet-dragging .leaflet-pane,
+.leaflet-dragging .leaflet-tile-pane,
+.leaflet-container:active,
+.leaflet-container:active * {
+  cursor: url('/cursors/grabbing.svg') 14 14, grabbing !important;
+}
+
+/* Markers, controls, and interactive overlays retain standard pointer */
+.leaflet-marker-icon,
+.leaflet-clickable,
+.leaflet-interactive,
+.leaflet-control,
+.leaflet-control * {
+  cursor: pointer !important;
+}
+
+/* Hide default leaflet zoom since we have custom floating controls */
+.leaflet-control-zoom {
+  display: none !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.75) !important;
+  color: #737373 !important;
+  font-size: 9px !important;
+  border-radius: 6px !important;
+  margin: 6px !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.dark .leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.75) !important;
+  color: #a3a3a3 !important;
+}
+
+.leaflet-control-attribution a {
+  color: inherit !important;
+  text-decoration: underline !important;
+}
+
+/* Minimal Pulse Animation */
+@keyframes subtle-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.85;
+  }
+}
+
+.animate-subtle-pulse {
+  animation: subtle-pulse 2s infinite ease-in-out;
+}
+
+/* Smooth Landing Text Animations */
+@keyframes text-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-text-transition {
+  animation: text-fade-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes float-subtle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-float {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+/* Route Dash Animation for Hero Network */
+@keyframes route-flow {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-route-flow {
+  stroke-dasharray: 6 6;
+  animation: route-flow 1.8s linear infinite;
+}
+
+/* Subtle Engineering Grid Background */
+.bg-engineering-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.light .bg-engineering-grid {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+}
+
+/* ==========================================================================
+   PRODUCTION-QUALITY TRIP RECEIPT PRINT STYLESHEET
+   Ensures window.print() outputs ONLY the official receipt with zero background,
+   zero modal backdrop, zero navigation, zero buttons, and sharp typography.
+   ========================================================================== */
+@media print {
+  @page {
+    margin: 12mm;
+    size: auto;
+  }
+
+  /* 1. Reset root background and text color for print */
+  html, body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* 2. Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* 3. Unhide ONLY the print receipt container and its children */
+  #collabfleet-print-receipt,
+  #collabfleet-print-receipt * {
+    visibility: visible;
+  }
+
+  /* 4. Position receipt cleanly at top of page without clipping or modal backdrop */
+  #collabfleet-print-receipt {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: 1px solid #e5e5e5 !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    overflow: visible !important;
+    border-radius: 12px !important;
+  }
+
+  /* 5. Strictly suppress action buttons, headers, navigation, and maps */
+  .print\:hidden,
+  button,
+  header,
+  nav,
+  .leaflet-container,
+  [role="dialog"] > div:first-child:not(#collabfleet-print-receipt) {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* 6. Ensure high print contrast on inner elements */
+  #collabfleet-print-receipt .bg-\[\#F8F7F4\],
+  #collabfleet-print-receipt .bg-emerald-50,
+  #collabfleet-print-receipt .bg-neutral-50 {
+    background-color: #f9f9f9 !important;
+    border-color: #e5e5e5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #collabfleet-print-receipt .bg-\[\#111111\] {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
