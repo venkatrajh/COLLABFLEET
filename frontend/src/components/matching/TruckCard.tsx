@@ -46,10 +46,10 @@ export const TruckCard: React.FC<TruckCardProps> = ({ match }) => {
   return (
     <div
       onClick={handleSelect}
-      className={`p-3.5 sm:p-4 rounded-2xl transition-all cursor-pointer border ${
+      className={`p-3.5 sm:p-4 transition-all cursor-pointer ${
         isSelected
-          ? 'bg-neutral-100 dark:bg-neutral-900 border-black dark:border-white shadow-lg ring-1 ring-black/10 dark:ring-white/20'
-          : 'glass-card hover:border-neutral-400 dark:hover:border-neutral-600'
+          ? 'bg-[#F6F5F0] border-l-4 border-l-black shadow-inner'
+          : 'hover:bg-[#FAF9F6]'
       }`}
     >
       {/* Top Header: Truck Name & AI Match Badge */}
@@ -124,7 +124,7 @@ export const TruckCard: React.FC<TruckCardProps> = ({ match }) => {
             onClick={handleViewDetail}
             className="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white border border-neutral-300 dark:border-neutral-700 hover:border-black dark:hover:border-white transition-colors"
           >
-            Details
+            View Match
           </button>
 
           <button

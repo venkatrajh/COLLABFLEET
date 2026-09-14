@@ -6,7 +6,17 @@ import { Truck } from '../../types';
 import { INITIAL_TRUCKS, CORRIDOR_CHENNAI_BENGALURU } from '../../services/mockData';
 import { Plus, Minus, Crosshair, RotateCcw, Maximize2, Minimize2 } from 'lucide-react';
 
-export const MapView: React.FC = () => {
+// Geographic Bounding Box for Indian Subcontinent - anchors focus to India while ensuring full tile coverage
+export const INDIA_BOUNDS = L.latLngBounds([1.0, 56.0], [42.0, 108.0]);
+export const INDIA_CENTER: [number, number] = [21.5, 78.96];
+
+export const isInsideIndia = (coords?: [number, number] | null): boolean => {
+  if (!coords || !Array.isArray(coords) || coords.length !== 2) return false;
+  const [lat, lng] = coords;
+  return lat >= 6.0 && lat <= 38.0 && lng >= 67.0 && lng <= 98.0;
+};
+
+export const MapView: React.FC<{ className?: string }> = ({ className = '' }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersLayerRef = useRef<L.LayerGroup | null>(null);
@@ -30,22 +40,26 @@ export const MapView: React.FC = () => {
     showToast
   } = useApp();
 
-  // Initialize Leaflet Map once with OpenStreetMap
+  // Initialize Leaflet Map once with OpenStreetMap (Constrained to India)
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
-    const initialCenter: [number, number] = [13.08, 80.27];
     const map = L.map(mapContainerRef.current, {
-      center: initialCenter,
-      zoom: 6,
+      center: INDIA_CENTER,
+      zoom: 5,
+      minZoom: 5,
+      maxZoom: 18,
+      maxBounds: INDIA_BOUNDS,
+      maxBoundsViscosity: 1.0,
       zoomControl: false,
       attributionControl: true
     });
 
-    // Standard OpenStreetMap Tile Layer (100% Free, NO API KEY)
+    // Standard OpenStreetMap Tile Layer - uninterrupted coverage across entire container
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19,
+      minZoom: 5,
+      maxZoom: 18,
       subdomains: ['a', 'b', 'c']
     }).addTo(map);
 
@@ -60,7 +74,15 @@ export const MapView: React.FC = () => {
     const handleResize = () => map.invalidateSize();
     window.addEventListener('resize', handleResize);
 
+    const resizeObserver = new ResizeObserver(() => {
+      map.invalidateSize();
+    });
+    if (mapContainerRef.current) {
+      resizeObserver.observe(mapContainerRef.current);
+    }
+
     return () => {
+      resizeObserver.disconnect();
       window.removeEventListener('resize', handleResize);
       map.remove();
       mapInstanceRef.current = null;
@@ -84,12 +106,17 @@ export const MapView: React.FC = () => {
     return () => clearTimeout(timer);
   }, [theme, isMapExpanded]);
 
-  // Listen to mapCenterTrigger to flyTo or panTo
+  // Listen to mapCenterTrigger to flyTo or panTo (Guarded to India)
   useEffect(() => {
     if (!mapInstanceRef.current || !mapCenterTrigger) return;
-    mapInstanceRef.current.flyTo(mapCenterTrigger.coords, mapCenterTrigger.zoom || 8, {
-      duration: 1
-    });
+    const { coords, zoom } = mapCenterTrigger;
+    if (isInsideIndia(coords)) {
+      mapInstanceRef.current.flyTo(coords, Math.max(4, Math.min(zoom || 8, 18)), {
+        duration: 1
+      });
+    } else {
+      mapInstanceRef.current.flyTo(INDIA_CENTER, 5, { duration: 1 });
+    }
   }, [mapCenterTrigger]);
 
   // Update Markers, Route, and Telemetry dynamically
@@ -174,8 +201,8 @@ export const MapView: React.FC = () => {
       });
     };
 
-    // 0. User Current GPS Location ("You are here")
-    if (userLocation) {
+    // 0. User Current GPS Location ("You are here" - Guarded to India)
+    if (userLocation && isInsideIndia(userLocation)) {
       boundsPoints.push(userLocation);
       const userLocIcon = L.divIcon({
         className: 'user-location-marker',
@@ -205,8 +232,8 @@ export const MapView: React.FC = () => {
       markersLayer.addLayer(userMarker);
     }
 
-    // 1. Pickup Location
-    if (searchQuery.fromLocation) {
+    // 1. Pickup Location (Guarded to India)
+    if (searchQuery.fromLocation && isInsideIndia(searchQuery.fromLocation.coordinates)) {
       const coords = searchQuery.fromLocation.coordinates;
       boundsPoints.push(coords);
       const marker = L.marker(coords, {
@@ -215,8 +242,8 @@ export const MapView: React.FC = () => {
       markersLayer.addLayer(marker);
     }
 
-    // 2. Destination Location
-    if (searchQuery.toLocation) {
+    // 2. Destination Location (Guarded to India)
+    if (searchQuery.toLocation && isInsideIndia(searchQuery.toLocation.coordinates)) {
       const coords = searchQuery.toLocation.coordinates;
       boundsPoints.push(coords);
       const marker = L.marker(coords, {
@@ -290,6 +317,7 @@ export const MapView: React.FC = () => {
         const truck = match.truck;
         const isSelected = selectedMatch?.truck.id === truck.id;
         const coords = truck.currentLocation.coordinates;
+        if (!isInsideIndia(coords)) return;
         boundsPoints.push(coords);
 
         const marker = L.marker(coords, {
@@ -337,6 +365,7 @@ export const MapView: React.FC = () => {
 
       INITIAL_TRUCKS.forEach(truck => {
         const coords = truck.currentLocation.coordinates;
+        if (!isInsideIndia(coords)) return;
         boundsPoints.push(coords);
 
         const isSelected = selectedMatch?.truck.id === truck.id;
@@ -397,9 +426,10 @@ export const MapView: React.FC = () => {
       });
     }
 
-    // Auto-fit on matching results or tracking
-    if (boundsPoints.length > 1 && (activeView === 'matching_results' || activeView === 'track_shipment')) {
-      map.fitBounds(L.latLngBounds(boundsPoints), {
+    // Auto-fit on matching results or tracking (strictly inside India)
+    const validBoundsPoints = boundsPoints.filter(isInsideIndia);
+    if (validBoundsPoints.length > 1 && (activeView === 'matching_results' || activeView === 'track_shipment')) {
+      map.fitBounds(L.latLngBounds(validBoundsPoints), {
         padding: [80, 80],
         maxZoom: 11,
         animate: true,
@@ -422,28 +452,30 @@ export const MapView: React.FC = () => {
   };
 
   const handleRecenter = () => {
-    recenterMap([13.08, 80.27], 6);
-    showToast('Map recentered to South India freight corridor', 'info');
+    recenterMap(INDIA_CENTER, 5);
+    showToast('Map recentered to India freight network', 'info');
   };
 
   return (
-    <div className="fixed inset-0 w-full h-full z-0 overflow-hidden">
+    <div 
+      className={`relative isolate z-0 w-full h-full min-h-[420px] overflow-hidden rounded-3xl border border-neutral-200/90 shadow-[0_4px_25px_rgba(0,0,0,0.04)] bg-neutral-100 ${className}`}
+      style={{ isolation: 'isolate' }}
+    >
       
       {/* Real Leaflet Map */}
       <div 
         ref={mapContainerRef} 
-        className={`w-full h-full ${theme === 'dark' ? 'dark-map' : 'light-map'}`}
-        style={{ height: '100vh', width: '100vw' }}
+        className={`w-full h-full min-h-[420px] ${theme === 'dark' ? 'dark-map' : 'light-map'}`}
       />
 
-      {/* Floating Map Controls (Right Side Floating Cluster) */}
-      <div className="fixed right-4 sm:right-6 bottom-24 sm:bottom-10 z-30 flex flex-col items-center gap-2 pointer-events-auto">
+      {/* Floating Map Controls (Contained in bottom-right corner of map card) */}
+      <div className="absolute right-3.5 bottom-3.5 sm:right-4 sm:bottom-4 z-[400] flex flex-col items-center gap-1.5 pointer-events-auto">
         
         {/* Zoom In/Out Cluster */}
-        <div className="flex flex-col rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl overflow-hidden">
+        <div className="flex flex-col rounded-2xl bg-white border border-neutral-200/90 shadow-md overflow-hidden">
           <button
             onClick={handleZoomIn}
-            className="w-10 h-10 flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors border-b border-neutral-200 dark:border-neutral-800"
+            className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-neutral-800 hover:bg-neutral-100 transition-colors border-b border-neutral-200"
             title="Zoom In"
             aria-label="Zoom in"
           >
@@ -451,7 +483,7 @@ export const MapView: React.FC = () => {
           </button>
           <button
             onClick={handleZoomOut}
-            className="w-10 h-10 flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-neutral-800 hover:bg-neutral-100 transition-colors"
             title="Zoom Out"
             aria-label="Zoom out"
           >
@@ -462,7 +494,7 @@ export const MapView: React.FC = () => {
         {/* Current Location (Locate Me) */}
         <button
           onClick={handleLocateMe}
-          className="w-10 h-10 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white border border-neutral-200/90 shadow-md flex items-center justify-center text-neutral-800 hover:bg-neutral-100 transition-colors"
           title="My Location"
           aria-label="My location"
         >
@@ -472,7 +504,7 @@ export const MapView: React.FC = () => {
         {/* Recenter Corridor */}
         <button
           onClick={handleRecenter}
-          className="w-10 h-10 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-xl flex items-center justify-center text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-white border border-neutral-200/90 shadow-md flex items-center justify-center text-neutral-800 hover:bg-neutral-100 transition-colors"
           title="Recenter Map"
           aria-label="Recenter map"
         >
@@ -482,10 +514,10 @@ export const MapView: React.FC = () => {
         {/* Expand / Minimize Map Toggle */}
         <button
           onClick={toggleMapExpanded}
-          className={`w-10 h-10 rounded-2xl border shadow-xl flex items-center justify-center transition-colors ${
+          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl border shadow-md flex items-center justify-center transition-colors ${
             isMapExpanded 
-              ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white' 
-              : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+              ? 'bg-neutral-950 text-white border-neutral-950' 
+              : 'bg-white border-neutral-200/90 text-neutral-800 hover:bg-neutral-100'
           }`}
           title={isMapExpanded ? "Restore UI Panels" : "Expand Map (Full View)"}
           aria-label="Expand or collapse map"

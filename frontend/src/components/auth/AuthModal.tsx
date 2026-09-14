@@ -61,7 +61,7 @@ export const AuthModal: React.FC = () => {
             <TruckIcon className="w-5 h-5" />
           </div>
           <h2 className="text-base font-extrabold text-neutral-900 dark:text-white tracking-tight pt-1">
-            How will you use CollabFleet?
+            How will you use COLLABFLEET?
           </h2>
           <p className="text-[11px] text-neutral-500">
             Select your account type

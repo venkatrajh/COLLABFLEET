@@ -40,9 +40,9 @@ export const BookingModal: React.FC = () => {
       maxWidth="max-w-md"
       title={
         <div>
-          <h3 className="text-base font-extrabold text-neutral-900 dark:text-white">Confirm Your Shipment</h3>
+          <h3 className="text-base font-extrabold text-neutral-900 dark:text-white">Request Truck Booking</h3>
           <p className="text-[11px] text-neutral-500 dark:text-neutral-400 font-normal">
-            Review freight booking details before confirming
+            Send a booking request to the fleet operator. Trip begins after confirmation.
           </p>
         </div>
       }
@@ -126,11 +126,11 @@ export const BookingModal: React.FC = () => {
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Confirming...</span>
+                <span>Sending Request...</span>
               </>
             ) : (
               <>
-                <span>Confirm Booking</span>
+                <span>Send Booking Request</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

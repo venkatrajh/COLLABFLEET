@@ -51,14 +51,14 @@ export const LandingOverlay: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. How CollabFleet Works */}
+      {/* 2. How COLLABFLEET Works */}
       <div className="space-y-4">
         <div className="text-center space-y-0.5">
           <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
             Process
           </span>
           <h2 className="text-xl sm:text-2xl font-black text-neutral-900 dark:text-white">
-            How CollabFleet Works
+            How COLLABFLEET Works
           </h2>
         </div>
 

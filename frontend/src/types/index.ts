@@ -72,13 +72,26 @@ export interface MatchResult {
 }
 
 export type ShipmentStatus = 
+  | 'pending'
+  | 'accepted'
   | 'confirmed'
   | 'driver_assigned'
   | 'going_to_pickup'
   | 'picked_up'
   | 'in_transit'
   | 'delivered'
+  | 'declined'
   | 'cancelled';
+
+export interface BookingMessage {
+  id: string;
+  bookingId: string;
+  senderRole: UserRole;
+  senderName: string;
+  text: string;
+  timestamp: string;
+  read?: boolean;
+}
 
 export interface Shipment {
   id: string;
@@ -101,9 +114,17 @@ export interface Shipment {
   co2ReductionKg?: number;
   savingsAmount?: number;
   createdAt: string;
+  acceptedAt?: string;
+  tripStartedAt?: string;
+  completedAt?: string;
+  declinedAt?: string;
   estimatedDeliveryTime?: string;
   currentTrackingPosition?: [number, number];
   progressPercentage?: number;
+  shipperName?: string;
+  shipperCompany?: string;
+  shipperPhone?: string;
+  messages?: BookingMessage[];
 }
 
 export interface FreightOpportunity {
@@ -120,6 +141,11 @@ export interface FreightOpportunity {
   routeMatchScore: number;
   shipperName: string;
   shipperRating: number;
+  truckTypeNeeded?: TruckType;
+  co2ReductionKg?: number;
+  savingsAmount?: number;
+  isReturnTrip?: boolean;
+  explanation?: AIExplanation;
 }
 
 export interface UserProfile {
@@ -141,13 +167,38 @@ export interface UserProfile {
   settings?: UserSettings;
 }
 
+export type NotificationType = 
+  | 'MATCH' 
+  | 'BOOKING' 
+  | 'TRACKING' 
+  | 'RETURN_TRIP' 
+  | 'DELIVERY' 
+  | 'SYSTEM' 
+  | 'ACCOUNT';
+
+export interface AppNotification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  timestamp: string; // ISO string
+  read: boolean;
+  role?: UserRole;
+  relatedId?: string;
+  relatedView?: AppView;
+}
+
+export interface NotificationPreferences {
+  shipmentUpdates: boolean;
+  newTruckMatches: boolean;
+  bookingUpdates: boolean;
+  deliveryUpdates: boolean;
+  returnTripOpportunities: boolean;
+  fleetOpportunities?: boolean;
+}
+
 export interface UserSettings {
-  notifications: {
-    shipmentUpdates: boolean;
-    newTruckMatches: boolean;
-    bookingUpdates: boolean;
-    fleetOpportunities: boolean;
-  };
+  notifications: NotificationPreferences;
   privacy: {
     profileVisibility: boolean;
     showCompanyInfo: boolean;
@@ -164,7 +215,7 @@ export interface SearchQueryParams {
   toLocation: LocationHub | null;
   cargoType: string;
   weightTons: number;
-  truckType: TruckType;
+  truckType?: TruckType | 'Any' | '';
 }
 
 export type AppView = 
@@ -179,4 +230,5 @@ export type AppView =
   | 'find_freight'
   | 'my_trucks'
   | 'smart_insights'
-  | 'profile';
+  | 'profile'
+  | 'notifications';

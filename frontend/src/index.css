@@ -192,3 +192,79 @@
   background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
 }
 
+/* ==========================================================================
+   PRODUCTION-QUALITY TRIP RECEIPT PRINT STYLESHEET
+   Ensures window.print() outputs ONLY the official receipt with zero background,
+   zero modal backdrop, zero navigation, zero buttons, and sharp typography.
+   ========================================================================== */
+@media print {
+  @page {
+    margin: 12mm;
+    size: auto;
+  }
+
+  /* 1. Reset root background and text color for print */
+  html, body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* 2. Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* 3. Unhide ONLY the print receipt container and its children */
+  #collabfleet-print-receipt,
+  #collabfleet-print-receipt * {
+    visibility: visible;
+  }
+
+  /* 4. Position receipt cleanly at top of page without clipping or modal backdrop */
+  #collabfleet-print-receipt {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: 1px solid #e5e5e5 !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    overflow: visible !important;
+    border-radius: 12px !important;
+  }
+
+  /* 5. Strictly suppress action buttons, headers, navigation, and maps */
+  .print\:hidden,
+  button,
+  header,
+  nav,
+  .leaflet-container,
+  [role="dialog"] > div:first-child:not(#collabfleet-print-receipt) {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* 6. Ensure high print contrast on inner elements */
+  #collabfleet-print-receipt .bg-\[\#F8F7F4\],
+  #collabfleet-print-receipt .bg-emerald-50,
+  #collabfleet-print-receipt .bg-neutral-50 {
+    background-color: #f9f9f9 !important;
+    border-color: #e5e5e5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #collabfleet-print-receipt .bg-\[\#111111\] {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+

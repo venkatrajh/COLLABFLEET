@@ -2,9 +2,34 @@ import { FreightOpportunity, Truck } from '../types';
 import { ApiClient } from './apiClient';
 import { INITIAL_TRUCKS, INITIAL_FREIGHT_OPPORTUNITIES } from './mockData';
 
+const TRUCKS_STORAGE_KEY = 'collabfleet_trucks';
+
 export class TruckService {
-  private static localTrucks: Truck[] = [...INITIAL_TRUCKS];
+  private static localTrucks: Truck[] = TruckService.initTrucks();
   private static localFreight: FreightOpportunity[] = [...INITIAL_FREIGHT_OPPORTUNITIES];
+
+  private static initTrucks(): Truck[] {
+    try {
+      const stored = localStorage.getItem(TRUCKS_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length >= INITIAL_TRUCKS.length) {
+          return parsed;
+        }
+      }
+    } catch {}
+    const defaultTrucks = [...INITIAL_TRUCKS];
+    try {
+      localStorage.setItem(TRUCKS_STORAGE_KEY, JSON.stringify(defaultTrucks));
+    } catch {}
+    return defaultTrucks;
+  }
+
+  private static saveTrucks(): void {
+    try {
+      localStorage.setItem(TRUCKS_STORAGE_KEY, JSON.stringify(this.localTrucks));
+    } catch {}
+  }
 
   public static async getMyTrucks(): Promise<Truck[]> {
     return ApiClient.executeWithFallback<Truck[]>(
@@ -12,6 +37,23 @@ export class TruckService {
       { method: 'GET' },
       () => [...this.localTrucks]
     );
+  }
+
+  public static async getAllTrucks(): Promise<Truck[]> {
+    return ApiClient.executeWithFallback<Truck[]>(
+      '/trucks',
+      { method: 'GET' },
+      () => [...this.localTrucks]
+    );
+  }
+
+  public static async toggleTruckAvailability(truckId: string): Promise<Truck | null> {
+    const truck = this.localTrucks.find(t => t.id === truckId);
+    if (!truck) return null;
+
+    truck.isAvailable = !truck.isAvailable;
+    this.saveTrucks();
+    return { ...truck };
   }
 
   public static async addTruck(truckData: Omit<Truck, 'id' | 'driver'> & { driverName?: string; driverPhone?: string }): Promise<Truck> {
@@ -47,6 +89,7 @@ export class TruckService {
           }
         };
         this.localTrucks.unshift(newTruck);
+        this.saveTrucks();
         return newTruck;
       }
     );
@@ -56,7 +99,7 @@ export class TruckService {
     return ApiClient.executeWithFallback<FreightOpportunity[]>(
       '/freight/opportunities',
       { method: 'GET' },
-      () => [...this.localFreight]
+      () => [...INITIAL_FREIGHT_OPPORTUNITIES]
     );
   }
 }

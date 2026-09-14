@@ -149,20 +149,20 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-neutral-100 flex flex-col justify-between selection:bg-white selection:text-black">
+    <div className="min-h-screen bg-[#FBFBFA] text-neutral-900 flex flex-col justify-between selection:bg-neutral-900 selection:text-white font-sans antialiased">
       
       {/* Top Bar */}
-      <header className="px-6 py-4 flex items-center justify-between border-b border-neutral-900 max-w-7xl mx-auto w-full">
+      <header className="px-6 py-4 flex items-center justify-between border-b border-neutral-200/80 max-w-7xl mx-auto w-full">
         <button
           onClick={() => setActiveView('landing')}
-          className="flex items-center gap-2 text-xs font-bold text-neutral-400 hover:text-white transition-colors"
+          className="flex items-center gap-2 text-xs font-bold text-neutral-600 hover:text-neutral-950 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Overview</span>
         </button>
 
         {/* Small Unobtrusive Demo Label */}
-        <div className="text-[10px] font-mono font-medium px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-400">
+        <div className="text-[10px] font-mono font-semibold px-2.5 py-1 rounded-full bg-white border border-neutral-200 text-neutral-600 shadow-xs">
           DEMO MODE · Frontend Prototype
         </div>
       </header>
@@ -174,37 +174,37 @@ export const LoginPage: React.FC = () => {
           {/* Left Column: Brand & Product Messaging (Cols 1-7) */}
           <div className="lg:col-span-7 space-y-6 text-left">
             
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-bold text-neutral-200 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-neutral-200 text-[11px] font-bold text-neutral-800 shadow-xs">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-700" />
               <span>COLLABFLEET SECURE ACCESS</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-neutral-950">
               Freight moves better together.
             </h1>
 
-            <p className="text-sm sm:text-base text-neutral-400 max-w-lg leading-relaxed">
+            <p className="text-sm sm:text-base text-neutral-600 max-w-lg leading-relaxed">
               AI-powered matching for smarter trips, guaranteed freight verification, and seamless empty-capacity reduction across India.
             </p>
 
             {/* Value bullets */}
-            <div className="space-y-3 pt-2 text-xs text-neutral-300">
+            <div className="space-y-3 pt-2 text-xs text-neutral-700">
               <div className="flex items-center gap-3">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Zero commission overhead on backhaul matches</span>
               </div>
               <div className="flex items-center gap-3">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Direct contact with verified truck drivers across India</span>
               </div>
               <div className="flex items-center gap-3">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Live GPS & simulated telemetry on OpenStreetMap</span>
               </div>
             </div>
 
             {/* Demo Mode Hint */}
-            <div className="pt-4 border-t border-neutral-800 text-[11px] text-neutral-500">
+            <div className="pt-4 border-t border-neutral-200 text-[11px] text-neutral-500">
               Demo accounts pre-filled. Enter any email or use Google Demo to immediately test the platform.
             </div>
 
@@ -212,19 +212,19 @@ export const LoginPage: React.FC = () => {
 
           {/* Right Column: Role Selection + Auth Form (Cols 8-12) */}
           <div className="lg:col-span-5 text-left">
-            <div className="p-6 sm:p-8 rounded-3xl bg-neutral-950 border border-neutral-800 shadow-2xl space-y-5">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-neutral-200/90 shadow-[0_8px_30px_rgba(0,0,0,0.06)] space-y-5">
               
               {/* If in Role Selection Step (after Sign Up or first Google login) */}
               {activeTab === 'role_select' ? (
                 <div className="space-y-5 animate-text-transition">
                   <div className="text-center space-y-1">
-                    <div className="w-10 h-10 rounded-2xl bg-white text-black flex items-center justify-center font-bold mx-auto mb-2 shadow">
+                    <div className="w-10 h-10 rounded-2xl bg-neutral-950 text-white flex items-center justify-center font-bold mx-auto mb-2 shadow-sm">
                       <Truck className="w-5 h-5" />
                     </div>
-                    <h2 className="text-lg font-black text-white tracking-tight">
-                      How will you use CollabFleet?
+                    <h2 className="text-lg font-black text-neutral-950 tracking-tight">
+                      How will you use COLLABFLEET?
                     </h2>
-                    <p className="text-xs text-neutral-400">
+                    <p className="text-xs text-neutral-500">
                       Select your primary role to launch the tailored map experience
                     </p>
                   </div>
@@ -233,53 +233,53 @@ export const LoginPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleCompleteRoleSelection('shipper')}
-                      className="w-full p-4 rounded-2xl border border-neutral-800 hover:border-white bg-neutral-900/70 hover:bg-neutral-900 transition-all flex items-center gap-3 text-left group"
+                      className="w-full p-4 rounded-2xl border border-neutral-200 hover:border-neutral-950 bg-neutral-50 hover:bg-white shadow-xs transition-all flex items-center gap-3 text-left group"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-white text-black flex items-center justify-center font-bold shrink-0">
+                      <div className="w-9 h-9 rounded-xl bg-neutral-950 text-white flex items-center justify-center font-bold shrink-0">
                         <Package className="w-4 h-4" />
                       </div>
                       <div className="flex-1">
-                        <div className="text-xs font-black text-white group-hover:text-blue-400 transition-colors">
+                        <div className="text-xs font-black text-neutral-950 group-hover:text-neutral-950 transition-colors">
                           I need a truck
                         </div>
-                        <div className="text-[11px] text-neutral-400">
+                        <div className="text-[11px] text-neutral-500">
                           Ship my freight with verified available capacity
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-neutral-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                      <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-950 group-hover:translate-x-1 transition-all" />
                     </button>
 
                     <button
                       type="button"
                       onClick={() => handleCompleteRoleSelection('fleet_operator')}
-                      className="w-full p-4 rounded-2xl border border-neutral-800 hover:border-white bg-neutral-900/70 hover:bg-neutral-900 transition-all flex items-center gap-3 text-left group"
+                      className="w-full p-4 rounded-2xl border border-neutral-200 hover:border-neutral-950 bg-neutral-50 hover:bg-white shadow-xs transition-all flex items-center gap-3 text-left group"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-white text-black flex items-center justify-center font-bold shrink-0">
+                      <div className="w-9 h-9 rounded-xl bg-neutral-950 text-white flex items-center justify-center font-bold shrink-0">
                         <Truck className="w-4 h-4" />
                       </div>
                       <div className="flex-1">
-                        <div className="text-xs font-black text-white group-hover:text-emerald-400 transition-colors">
+                        <div className="text-xs font-black text-neutral-950 group-hover:text-neutral-950 transition-colors">
                           I have trucks
                         </div>
-                        <div className="text-[11px] text-neutral-400">
+                        <div className="text-[11px] text-neutral-500">
                           Find return-trip loads & maximize vehicle earnings
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-neutral-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
+                      <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-950 group-hover:translate-x-1 transition-all" />
                     </button>
                   </div>
                 </div>
               ) : (
                 <>
                   {/* Tabs: Sign In vs Create Account */}
-                  <div className="flex items-center p-1 bg-neutral-900 rounded-2xl border border-neutral-800">
+                  <div className="flex items-center p-1 bg-neutral-100 rounded-2xl border border-neutral-200/80">
                     <button
                       type="button"
                       onClick={() => { setActiveTab('signin'); setErrors({}); }}
                       className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
                         activeTab === 'signin'
-                          ? 'bg-white text-black shadow-sm'
-                          : 'text-neutral-400 hover:text-white'
+                          ? 'bg-white text-neutral-950 shadow-sm'
+                          : 'text-neutral-500 hover:text-neutral-950'
                       }`}
                     >
                       Sign In
@@ -289,8 +289,8 @@ export const LoginPage: React.FC = () => {
                       onClick={() => { setActiveTab('signup'); setErrors({}); }}
                       className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
                         activeTab === 'signup'
-                          ? 'bg-white text-black shadow-sm'
-                          : 'text-neutral-400 hover:text-white'
+                          ? 'bg-white text-neutral-950 shadow-sm'
+                          : 'text-neutral-500 hover:text-neutral-950'
                       }`}
                     >
                       Create Account
@@ -303,7 +303,7 @@ export const LoginPage: React.FC = () => {
                       
                       {/* Email Field */}
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
                           Email Address
                         </label>
                         <div className="relative">
@@ -315,24 +315,24 @@ export const LoginPage: React.FC = () => {
                               if (errors.signInEmail) setErrors(prev => ({ ...prev, signInEmail: '' }));
                             }}
                             placeholder="demo@collabfleet.ai"
-                            className={`w-full px-3.5 py-2.5 rounded-xl glass-input text-xs font-semibold pl-9 ${
+                            className={`w-full px-3.5 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none text-xs font-semibold pl-9 transition-all ${
                               errors.signInEmail ? 'border-red-500 ring-1 ring-red-500' : ''
                             }`}
                           />
-                          <Mail className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                          <Mail className="w-4 h-4 text-neutral-400 absolute left-3 top-3" />
                         </div>
                         {errors.signInEmail && (
-                          <p className="text-[10px] text-red-400 mt-1 font-medium">{errors.signInEmail}</p>
+                          <p className="text-[10px] text-red-600 mt-1 font-medium">{errors.signInEmail}</p>
                         )}
                       </div>
 
                       {/* Password Field */}
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+                          <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500">
                             Password
                           </label>
-                          <span className="text-[10px] text-neutral-500 hover:underline cursor-pointer">
+                          <span className="text-[10px] text-neutral-500 hover:text-neutral-950 hover:underline cursor-pointer transition-colors">
                             Forgot?
                           </span>
                         </div>
@@ -345,14 +345,14 @@ export const LoginPage: React.FC = () => {
                               if (errors.signInPassword) setErrors(prev => ({ ...prev, signInPassword: '' }));
                             }}
                             placeholder="••••••••"
-                            className={`w-full px-3.5 py-2.5 rounded-xl glass-input text-xs font-semibold pl-9 ${
+                            className={`w-full px-3.5 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none text-xs font-semibold pl-9 transition-all ${
                               errors.signInPassword ? 'border-red-500 ring-1 ring-red-500' : ''
                             }`}
                           />
-                          <Lock className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                          <Lock className="w-4 h-4 text-neutral-400 absolute left-3 top-3" />
                         </div>
                         {errors.signInPassword && (
-                          <p className="text-[10px] text-red-400 mt-1 font-medium">{errors.signInPassword}</p>
+                          <p className="text-[10px] text-red-600 mt-1 font-medium">{errors.signInPassword}</p>
                         )}
                       </div>
 
@@ -360,7 +360,7 @@ export const LoginPage: React.FC = () => {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full py-3 px-4 rounded-xl bg-white text-black font-extrabold text-xs shadow hover:opacity-90 active:scale-[0.99] transition-all flex items-center justify-center gap-2 mt-1 disabled:opacity-50"
+                        className="w-full py-3 px-4 rounded-xl bg-neutral-950 text-white font-extrabold text-xs shadow-xs hover:bg-neutral-800 active:scale-[0.99] transition-all flex items-center justify-center gap-2 mt-1 disabled:opacity-50"
                       >
                         {isSubmitting ? (
                           <>
@@ -377,8 +377,8 @@ export const LoginPage: React.FC = () => {
 
                       {/* Divider */}
                       <div className="relative flex items-center justify-center py-2">
-                        <div className="w-full border-t border-neutral-800" />
-                        <span className="bg-neutral-950 px-3 text-[10px] font-bold uppercase text-neutral-500 absolute">
+                        <div className="w-full border-t border-neutral-200" />
+                        <span className="bg-white px-3 text-[10px] font-bold uppercase text-neutral-400 absolute">
                           OR
                         </span>
                       </div>
@@ -388,7 +388,7 @@ export const LoginPage: React.FC = () => {
                         type="button"
                         onClick={handleGoogleSignIn}
                         disabled={isGoogleLoading}
-                        className="w-full py-2.5 px-4 rounded-xl bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-white font-bold text-xs transition-all flex items-center justify-center gap-2.5 disabled:opacity-50"
+                        className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-neutral-50 border border-neutral-200/90 text-neutral-800 shadow-xs font-bold text-xs transition-all flex items-center justify-center gap-2.5 disabled:opacity-50"
                       >
                         {isGoogleLoading ? (
                           <>
@@ -412,7 +412,7 @@ export const LoginPage: React.FC = () => {
                         <span>Don't have an account? </span>
                         <span 
                           onClick={() => { setActiveTab('signup'); setErrors({}); }}
-                          className="font-bold text-white cursor-pointer hover:underline"
+                          className="font-bold text-neutral-950 cursor-pointer hover:underline"
                         >
                           Create account
                         </span>
@@ -426,7 +426,7 @@ export const LoginPage: React.FC = () => {
                       
                       {/* Full Name */}
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
                           Full Name
                         </label>
                         <div className="relative">
@@ -438,20 +438,20 @@ export const LoginPage: React.FC = () => {
                               if (errors.signUpName) setErrors(prev => ({ ...prev, signUpName: '' }));
                             }}
                             placeholder="Nakul Venkatesh"
-                            className={`w-full px-3.5 py-2.5 rounded-xl glass-input text-xs font-semibold pl-9 ${
+                            className={`w-full px-3.5 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none text-xs font-semibold pl-9 transition-all ${
                               errors.signUpName ? 'border-red-500 ring-1 ring-red-500' : ''
                             }`}
                           />
-                          <User className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                          <User className="w-4 h-4 text-neutral-400 absolute left-3 top-3" />
                         </div>
                         {errors.signUpName && (
-                          <p className="text-[10px] text-red-400 mt-1 font-medium">{errors.signUpName}</p>
+                          <p className="text-[10px] text-red-600 mt-1 font-medium">{errors.signUpName}</p>
                         )}
                       </div>
 
                       {/* Email */}
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
                           Email Address
                         </label>
                         <div className="relative">
@@ -463,20 +463,20 @@ export const LoginPage: React.FC = () => {
                               if (errors.signUpEmail) setErrors(prev => ({ ...prev, signUpEmail: '' }));
                             }}
                             placeholder="name@company.com"
-                            className={`w-full px-3.5 py-2.5 rounded-xl glass-input text-xs font-semibold pl-9 ${
+                            className={`w-full px-3.5 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none text-xs font-semibold pl-9 transition-all ${
                               errors.signUpEmail ? 'border-red-500 ring-1 ring-red-500' : ''
                             }`}
                           />
-                          <Mail className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                          <Mail className="w-4 h-4 text-neutral-400 absolute left-3 top-3" />
                         </div>
                         {errors.signUpEmail && (
-                          <p className="text-[10px] text-red-400 mt-1 font-medium">{errors.signUpEmail}</p>
+                          <p className="text-[10px] text-red-600 mt-1 font-medium">{errors.signUpEmail}</p>
                         )}
                       </div>
 
                       {/* Password */}
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
                           Password
                         </label>
                         <div className="relative">
@@ -488,20 +488,20 @@ export const LoginPage: React.FC = () => {
                               if (errors.signUpPassword) setErrors(prev => ({ ...prev, signUpPassword: '' }));
                             }}
                             placeholder="At least 6 characters"
-                            className={`w-full px-3.5 py-2.5 rounded-xl glass-input text-xs font-semibold pl-9 ${
+                            className={`w-full px-3.5 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none text-xs font-semibold pl-9 transition-all ${
                               errors.signUpPassword ? 'border-red-500 ring-1 ring-red-500' : ''
                             }`}
                           />
-                          <Lock className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                          <Lock className="w-4 h-4 text-neutral-400 absolute left-3 top-3" />
                         </div>
                         {errors.signUpPassword && (
-                          <p className="text-[10px] text-red-400 mt-1 font-medium">{errors.signUpPassword}</p>
+                          <p className="text-[10px] text-red-600 mt-1 font-medium">{errors.signUpPassword}</p>
                         )}
                       </div>
 
                       {/* Confirm Password */}
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
                           Confirm Password
                         </label>
                         <div className="relative">
@@ -513,14 +513,14 @@ export const LoginPage: React.FC = () => {
                               if (errors.signUpConfirmPassword) setErrors(prev => ({ ...prev, signUpConfirmPassword: '' }));
                             }}
                             placeholder="Re-enter password"
-                            className={`w-full px-3.5 py-2.5 rounded-xl glass-input text-xs font-semibold pl-9 ${
+                            className={`w-full px-3.5 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900 outline-none text-xs font-semibold pl-9 transition-all ${
                               errors.signUpConfirmPassword ? 'border-red-500 ring-1 ring-red-500' : ''
                             }`}
                           />
-                          <Lock className="w-4 h-4 text-neutral-500 absolute left-3 top-3" />
+                          <Lock className="w-4 h-4 text-neutral-400 absolute left-3 top-3" />
                         </div>
                         {errors.signUpConfirmPassword && (
-                          <p className="text-[10px] text-red-400 mt-1 font-medium">{errors.signUpConfirmPassword}</p>
+                          <p className="text-[10px] text-red-600 mt-1 font-medium">{errors.signUpConfirmPassword}</p>
                         )}
                       </div>
 
@@ -528,7 +528,7 @@ export const LoginPage: React.FC = () => {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full py-3 px-4 rounded-xl bg-white text-black font-extrabold text-xs shadow hover:opacity-90 active:scale-[0.99] transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                        className="w-full py-3 px-4 rounded-xl bg-neutral-950 text-white font-extrabold text-xs shadow-xs hover:bg-neutral-800 active:scale-[0.99] transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
                       >
                         {isSubmitting ? (
                           <>
@@ -547,7 +547,7 @@ export const LoginPage: React.FC = () => {
                         <span>Already have an account? </span>
                         <span 
                           onClick={() => { setActiveTab('signin'); setErrors({}); }}
-                          className="font-bold text-white cursor-pointer hover:underline"
+                          className="font-bold text-neutral-950 cursor-pointer hover:underline"
                         >
                           Sign in
                         </span>
@@ -564,7 +564,7 @@ export const LoginPage: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 border-t border-neutral-900 text-[11px] text-neutral-500 text-center">
+      <footer className="py-6 border-t border-neutral-200/80 text-[11px] text-neutral-500 text-center">
         COLLABFLEET · Protected Demo Authentication · OpenStreetMap Intelligence
       </footer>
 

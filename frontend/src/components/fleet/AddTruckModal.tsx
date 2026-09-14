@@ -20,7 +20,7 @@ interface AddTruckModalProps {
 }
 
 export const AddTruckModal: React.FC<AddTruckModalProps> = ({ onTruckAdded }) => {
-  const { isAddTruckOpen, setIsAddTruckOpen, showToast } = useApp();
+  const { isAddTruckOpen, setIsAddTruckOpen, showToast, triggerNotification } = useApp();
 
   const [name, setName] = useState('');
   const [model, setModel] = useState('');
@@ -61,6 +61,13 @@ export const AddTruckModal: React.FC<AddTruckModalProps> = ({ onTruckAdded }) =>
       });
 
       showToast(`Truck ${name} added to fleet!`, 'success');
+      triggerNotification(
+        'SYSTEM',
+        'Truck Added to Fleet',
+        `${name} (${plateNumber}) is now active and ready for collaborative matching.`,
+        undefined,
+        'my_trucks'
+      );
       setIsAddTruckOpen(false);
       onTruckAdded?.();
       

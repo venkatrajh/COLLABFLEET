@@ -16,7 +16,7 @@ export const WhyThisTruckModal: React.FC = () => {
     { name: 'Distance', score: explanation.distanceScore },
     { name: 'Price', score: explanation.priceScore },
     { name: 'Driver Reliability', score: explanation.driverReliabilityScore },
-    { name: 'Return Trip', score: explanation.returnTripScore },
+    { name: 'Return Trip Potential', score: explanation.returnTripScore },
   ];
 
   return (
@@ -32,7 +32,7 @@ export const WhyThisTruckModal: React.FC = () => {
           <div>
             <h3 className="text-sm font-extrabold text-neutral-900 dark:text-white">Why this truck?</h3>
             <p className="text-[10px] text-neutral-500 dark:text-neutral-400 font-normal">
-              {truck.name} · {matchScore}% AI Match
+              {truck.name} · Verified Collaborative Hauler
             </p>
           </div>
         </div>
@@ -40,10 +40,18 @@ export const WhyThisTruckModal: React.FC = () => {
     >
       <div className="space-y-4">
         
-        {/* Natural Language Explanation */}
-        <div className="p-3.5 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
-          <p className="text-xs sm:text-sm text-neutral-800 dark:text-neutral-200 font-medium leading-relaxed">
-            "This truck has enough available space, is close to pickup, and already matches your route."
+        {/* Prominent Match Badge & Natural Language Explanation */}
+        <div className="p-4 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-2.5">
+          <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+              Intelligence Breakdown
+            </span>
+            <span className="px-3 py-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-xs font-black tracking-tight">
+              {matchScore}% MATCH
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-neutral-800 dark:text-neutral-200 font-medium leading-relaxed italic">
+            "{explanation.summaryReason}"
           </p>
         </div>
 

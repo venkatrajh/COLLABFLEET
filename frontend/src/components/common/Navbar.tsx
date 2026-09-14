@@ -1,14 +1,9 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { AppView } from '../../types';
+import { NotificationBell } from '../notifications/NotificationBell';
+import logoMark from '../../assets/branding/collabfleet-logo-mark.png';
 import { 
-  Truck, 
-  Search, 
-  PlusCircle, 
-  Package, 
-  Boxes, 
-  Sparkles, 
-  User, 
   Maximize2, 
   Minimize2, 
   LogOut 
@@ -17,7 +12,6 @@ import {
 export const Navbar: React.FC = () => {
   const { 
     currentRole, 
-    setRole, 
     activeView, 
     setActiveView, 
     userProfile,
@@ -31,35 +25,46 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="fixed top-3 left-3 right-3 sm:top-4 sm:left-6 sm:right-6 z-40 max-w-7xl mx-auto pointer-events-none">
-      <div className="glass-panel rounded-2xl px-3.5 py-2.5 sm:px-5 sm:py-3 flex items-center justify-between border shadow-lg pointer-events-auto">
+    <header className="sticky top-0 z-[100] w-full bg-white border-b border-neutral-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand Logo & Name */}
         <div 
           onClick={() => handleNavClick(currentRole === 'fleet_operator' ? 'find_freight' : 'home')}
-          className="flex items-center gap-2.5 cursor-pointer group select-none shrink-0"
+          className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
         >
-          <div className="w-8 h-8 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center font-black transition-transform group-hover:scale-105 shadow-sm">
-            <Truck className="w-4 h-4" />
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="font-extrabold text-base tracking-tight font-sans text-neutral-900 dark:text-white">
-              COLLABFLEET
-            </span>
-          </div>
+          <img 
+            src={logoMark} 
+            alt="COLLABFLEET" 
+            className="h-9 w-9 sm:h-10 sm:w-10 object-contain transition-transform group-hover:scale-105" 
+          />
+          <span className="font-black text-xl sm:text-[22px] tracking-tight font-sans text-neutral-950 leading-none select-none">
+            COLLABFLEET
+          </span>
         </div>
 
         {/* Desktop Navigation Tabs (Strictly Role-Specific) */}
-        <nav className="hidden md:flex items-center gap-1 bg-neutral-100 dark:bg-neutral-900/80 p-1 rounded-xl border border-neutral-200 dark:border-neutral-800">
+        <nav className="hidden md:flex items-center gap-1 bg-neutral-100 p-1 rounded-xl border border-neutral-200">
           
           {currentRole === 'shipper' ? (
             <>
               <button
                 onClick={() => handleNavClick('home')}
                 className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
-                  activeView === 'home' || activeView === 'find_truck' || activeView === 'matching_results'
-                    ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
+                  activeView === 'home'
+                    ? 'bg-white font-black text-neutral-950 shadow-xs'
+                    : 'text-neutral-600 hover:text-neutral-950 font-semibold'
+                }`}
+              >
+                Home
+              </button>
+
+              <button
+                onClick={() => handleNavClick('find_truck')}
+                className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
+                  activeView === 'find_truck' || activeView === 'matching_results'
+                    ? 'bg-white font-black text-neutral-950 shadow-xs'
+                    : 'text-neutral-600 hover:text-neutral-950 font-semibold'
                 }`}
               >
                 Find a Truck
@@ -69,8 +74,8 @@ export const Navbar: React.FC = () => {
                 onClick={() => handleNavClick('post_shipment')}
                 className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                   activeView === 'post_shipment'
-                    ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
+                    ? 'bg-white font-black text-neutral-950 shadow-xs'
+                    : 'text-neutral-600 hover:text-neutral-950 font-semibold'
                 }`}
               >
                 Post a Shipment
@@ -82,8 +87,8 @@ export const Navbar: React.FC = () => {
                 onClick={() => handleNavClick('find_freight')}
                 className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                   activeView === 'find_freight'
-                    ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
+                    ? 'bg-white font-black text-neutral-950 shadow-xs'
+                    : 'text-neutral-600 hover:text-neutral-950 font-semibold'
                 }`}
               >
                 Find Freight
@@ -93,8 +98,8 @@ export const Navbar: React.FC = () => {
                 onClick={() => handleNavClick('my_trucks')}
                 className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
                   activeView === 'my_trucks'
-                    ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
+                    ? 'bg-white font-black text-neutral-950 shadow-xs'
+                    : 'text-neutral-600 hover:text-neutral-950 font-semibold'
                 }`}
               >
                 My Trucks
@@ -106,8 +111,8 @@ export const Navbar: React.FC = () => {
             onClick={() => handleNavClick('my_shipments')}
             className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               activeView === 'my_shipments' || activeView === 'track_shipment'
-                ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
+                ? 'bg-white font-black text-neutral-950 shadow-xs'
+                : 'text-neutral-600 hover:text-neutral-950 font-semibold'
             }`}
           >
             My Shipments
@@ -117,8 +122,8 @@ export const Navbar: React.FC = () => {
             onClick={() => handleNavClick('smart_insights')}
             className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
               activeView === 'smart_insights'
-                ? 'glass-selected font-black text-[#111111] dark:text-white shadow-sm'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white font-semibold'
+                ? 'bg-white font-black text-neutral-950 shadow-xs'
+                : 'text-neutral-600 hover:text-neutral-950 font-semibold'
             }`}
           >
             Smart Insights
@@ -133,8 +138,8 @@ export const Navbar: React.FC = () => {
             onClick={toggleMapExpanded}
             className={`px-2.5 py-1.5 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 ${
               isMapExpanded 
-                ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white shadow-md' 
-                : 'bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white'
+                ? 'bg-neutral-950 text-white border-neutral-950 shadow-xs' 
+                : 'bg-neutral-100 border-neutral-200 text-neutral-700 hover:text-neutral-950 hover:bg-neutral-200/60'
             }`}
             title={isMapExpanded ? 'Restore UI panels' : 'Maximize Map View'}
           >
@@ -151,34 +156,13 @@ export const Navbar: React.FC = () => {
             )}
           </button>
 
-          {/* Role Segment Toggle */}
-          <div className="flex items-center bg-neutral-100 dark:bg-neutral-900 p-1 rounded-xl border border-neutral-200 dark:border-neutral-800">
-            <button
-              onClick={() => setRole('shipper')}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                currentRole === 'shipper'
-                  ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
-              }`}
-            >
-              Shipper
-            </button>
-            <button
-              onClick={() => setRole('fleet_operator')}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                currentRole === 'fleet_operator'
-                  ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
-              }`}
-            >
-              Fleet
-            </button>
-          </div>
+          {/* Notifications Center */}
+          <NotificationBell />
 
           {/* Profile Trigger */}
           <button
             onClick={() => handleNavClick('profile')}
-            className="w-9 h-9 rounded-xl bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-white flex items-center justify-center text-xs font-extrabold border border-neutral-300 dark:border-neutral-700 hover:border-black dark:hover:border-white transition-colors"
+            className="w-9 h-9 rounded-xl bg-neutral-100 text-neutral-900 flex items-center justify-center text-xs font-extrabold border border-neutral-200 hover:border-neutral-950 transition-colors"
             title="Open Profile"
             aria-label="Profile"
           >
@@ -188,7 +172,7 @@ export const Navbar: React.FC = () => {
           {/* Logout Button */}
           <button
             onClick={logoutUser}
-            className="w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-500 hover:text-red-500 flex items-center justify-center transition-colors"
+            className="w-9 h-9 rounded-xl bg-neutral-100 border border-neutral-200 text-neutral-500 hover:text-red-600 flex items-center justify-center transition-colors"
             title="Sign Out"
             aria-label="Sign out"
           >

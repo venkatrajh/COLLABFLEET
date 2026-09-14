@@ -39,7 +39,7 @@ export class ApiClient {
         return data as T;
       }
       // If backend responded with 404/500, fallback cleanly
-      console.warn(`[CollabFleet API] Backend responded with ${response.status} for ${endpoint}. Using intelligent mock engine.`);
+      console.warn(`[COLLABFLEET API] Backend responded with ${response.status} for ${endpoint}. Using intelligent mock engine.`);
       return await fallbackFn();
     } catch (err) {
       // Offline / Network Error / Aborted: Seamlessly execute fallback
